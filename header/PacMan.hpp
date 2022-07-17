@@ -7,9 +7,11 @@ class PacMan
 private:
     int X; // موقعیت طولی
     int Y; // موقعیت عرضی
-    int Life; // تعداد جان های پک من
-    llint Score; // مقدار امتیاز پک من  
+    static int Life; // تعداد جان های پک من
+    static llint Score; // مقدار امتیاز پک من  
+    llint HighScore;
 public:
+    PacMan(int , int);
     PacMan();
     ~PacMan();
     void set_life(int);
@@ -19,6 +21,8 @@ public:
     int get_y() const;
     void set_score(llint );
     llint get_score() const;
+    void set_HighScore();
+    llint get_HighScore() const;
 };
 
 #endif
