@@ -9,11 +9,11 @@ using namespace std;
 
 int main()
 {
-    PacMan m;
-    char ch;
-    cout << "Enter a number : ";
-    ch = cin.get();
-    cin.ignore();
-    cout << ch << endl;
+    while (1)
+    {
+        PacMan(1 , 2);
+    }
+    
+    
     return 0;
 }
