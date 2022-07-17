@@ -23,17 +23,6 @@ PacMan::~PacMan()
     //Life--;
 }
 
-//  here set the element "Life" of pacman 
-// void PacMan::set_life(int l) // life shoud be 1 - 7
-// {
-//     if(l < 1 || l > LP){
-//         throw out_of_range("Error: The number of life`s pac man is out of range...");
-//     }
-//     else{
-//         Life = l;
-//     }
-// }End function*
-
 int PacMan::get_life() const
 {
     return Life;
@@ -70,13 +59,11 @@ llint PacMan::get_score() const
 
 void PacMan::set_HighScore()
 {
-    ifstream file("HighScore.txt", ios::in);
+    ifstream file("HighScore.txt", ios::in | ios::ate);
     if (!file){
-        throw runtime_error("Error: The file \" HighScore \" could not be opened...");
-    }
-    if(file.tellg() == 0)
-    {
         HighScore = 0;
+        update_HighScore();
+        //throw runtime_error("Error: The file \" HighScore \" could not be opened...");
     }
     else {
         file.seekg(0, ios::beg);
@@ -97,13 +84,14 @@ llint PacMan::get_HighScore() const
 
 void PacMan::update_HighScore() 
 {
-    if (HighScore < Score)
+    if ( Score >= HighScore)
     {
         ofstream file("HighScore.txt", ios::out);
         if(!file)
         {
             throw runtime_error("Error: The file \" HighScore \" could not be opened...");
         }
+        HighScore = Score;
 
         file << Score;
     }
