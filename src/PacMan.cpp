@@ -53,7 +53,7 @@ void PacMan::set_score(llint s )
 
 }// End function*
 
-llint PacMan::grt_scor() const
+llint PacMan::get_score() const
 {
     return Score;
 }// End function*
