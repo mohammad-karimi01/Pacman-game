@@ -7,8 +7,8 @@ class PacMan
 private:
     int X; // موقعیت طولی
     int Y; // موقعیت عرضی
-    static int Life; // تعداد جان های پک من
-    static llint Score; // مقدار امتیاز پک من  
+    int Life; // تعداد جان های پک من
+    llint Score; // مقدار امتیاز پک من  
     llint HighScore;
     ///////////////////
     void set_HighScore();

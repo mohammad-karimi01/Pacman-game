@@ -7,20 +7,21 @@
 
 using namespace std;
 
-int PacMan::Life = 4; 
-llint PacMan::Score = 0;
+ 
+ 
 
 PacMan::PacMan() 
 {
     set_xy(POS_X, POS_Y); //سازنده پیش فرض برای مقدار دهی موقعیت اولیه پک من هنگام تولد برای شرع بازی
     set_HighScore();
     set_score(0);
+    Life = 4;
     
 }
 
 PacMan::~PacMan()
 {
-    //Life--;
+    cout << "Distructor...." << endl;
 }
 
 int PacMan::get_life() const
