@@ -15,6 +15,8 @@ public:
     void set_xy(int, int);
     int get_x() const;
     int get_y() const;
+
+    void Change_CurrentState(ghosts_state * );
    
 };
 
