@@ -8,6 +8,7 @@ class ghosts_state
     //private:
 
     public:
+        virtual void print() = 0;
         
 };
 
