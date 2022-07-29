@@ -4,7 +4,7 @@
 
 #define LP 7
 
-enum Color {Blinky = 1 , Pinky, lnky, Clyde};
+enum Color  {Blinky = 1 , Pinky, Inky, Clyde};
 //          ghermez  sorati  firozei   narngi
 // typedef long long int llint;
 
@@ -16,14 +16,16 @@ private:
     ghosts_state * current_state;
     Color color;
 public:
+    Ghosts(ghosts_state *, int);
     void set_xy(int, int);
     int get_x() const;
     int get_y() const;
-    void set_color(Color );
+    void set_color(int ); // need change --- int > Color
     Color get_color();
 
     void Change_CurrentState(ghosts_state * );
-   
+
+    void print();
 };
 
 #endif
