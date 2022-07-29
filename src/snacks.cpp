@@ -1,21 +1,36 @@
-#ifndef _SNACKS
-#define _SNACKS
-#include "snacks_state.hpp"
+#include "snacks.hpp"
+#include <iostream>
 
-#define LP 7
-// typedef long long int llint;
+using namespace std;
 
-class snacks
+snacks::snacks(snacks_state * s, int x, int y)
 {
-private:
-    int X; // موقعیت طولی
-    int Y; // موقعیت عرضی
-    snacks_state * current_state;
-public:
-    void set_xy(int, int);
-    int get_x() const;
-    int get_y() const;
-   
-};
+    ChangeState(s);
+    set_xy(x, y);
+}
+void snacks::set_xy(int x, int y) 
+{
+    this->X = x;
+    this->Y = y;
+}
+int snacks::get_x() const
+{
+    return X;
+}
+int snacks::get_y() const
+{
+    return Y;
+}
 
-#endif
+void snacks::ChangeState(snacks_state * NewState)
+{
+    current_state = NewState;
+}
+
+void snacks::print()
+{
+    cout << ".................................................." << endl;
+    cout << "State: " ;
+    current_state->print();
+    cout << X << " " << Y << endl;
+}

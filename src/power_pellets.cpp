@@ -1,15 +1,9 @@
-#ifndef _POWER_PELLETS
-#define _POWER_PELLETS
-#include "snacks_state.hpp"
+#include "power_pellets.hpp"
+#include <iostream>
 
-class power_pellets : public snacks_state
+using namespace std;
+
+void power_pellets::print()
 {
-    private:
-    
-    public:
-    
-};
-
-
-
-#endif
+    cout << "power_pellets" << endl;
+}// End function*

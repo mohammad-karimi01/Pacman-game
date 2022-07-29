@@ -1,15 +1,9 @@
-#ifndef _PELLETS
-#define _PELLETS
-#include "snacks_state.hpp"
+#include "pellets.hpp"
+#include <iostream>
 
-class pellets : public snacks_state
+using namespace std;
+
+void pellets::print()
 {
-    private:
-    
-    public:
-    
-};
-
-
-
-#endif
+    cout << "pellets" << endl;
+}// End function*

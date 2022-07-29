@@ -4,9 +4,9 @@
 
 class pellets : public snacks_state
 {
-    private:
     
     public:
+        virtual void print() override;
     
 };
 
