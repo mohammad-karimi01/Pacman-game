@@ -1,0 +1,3 @@
+C:/Users/K2/Desktop/Pacman-game/build/CMakeFiles/app.dir
+C:/Users/K2/Desktop/Pacman-game/build/CMakeFiles/edit_cache.dir
+C:/Users/K2/Desktop/Pacman-game/build/CMakeFiles/rebuild_cache.dir

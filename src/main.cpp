@@ -3,25 +3,24 @@
 #include <vector>
 #include <stdexcept>
 #include <iomanip>
-//#include "includefile.hpp"
-#include "../header/PacMan.hpp"
-using namespace std;
+#include "includefile.hpp"
 
+using namespace std;
 int main()
 {
-    PacMan p;
+    pellets p;
+    power_pellets pp;
+    fruits f;
+    
+    snacks s1(&p, 1,1);
 
-    cout << "Life: " << p.get_life() << endl
-         << "Score: " << p.get_score() << endl
-         << "High score: " << p.get_HighScore() << endl
-         << "Position ----- X: " << p.get_x() << "--- Y: " << p.get_y() << endl; 
-    cout << "..................................................." << endl;
-    p.set_score(5555);
-    p.update_HighScore();
-    cout << "Life: " << p.get_life() << endl
-         << "Score: " << p.get_score() << endl
-         << "High score: " << p.get_HighScore() << endl
-         << "Position ----- X: " << p.get_x() << "--- Y: " << p.get_y() << endl; 
+    snacks s2(&pp, 2,2);
+    snacks s3(&f, 3,3);
+
+    s1.print();
+    s2.print();
+    s3.print();
+    
 
     cout << "End...." << endl;
     return 0;

@@ -1,0 +1,57 @@
+[
+{
+  "directory": "C:/Users/K2/Desktop/Pacman-game/build",
+  "command": "C:\\PROGRA~2\\X86_64~1.0-W\\mingw64\\bin\\G__~1.EXE  @CMakeFiles/app.dir/includes_CXX.rsp -g -o CMakeFiles\\app.dir\\src\\main.cpp.obj -c C:\\Users\\K2\\Desktop\\Pacman-game\\src\\main.cpp",
+  "file": "C:/Users/K2/Desktop/Pacman-game/src/main.cpp"
+},
+{
+  "directory": "C:/Users/K2/Desktop/Pacman-game/build",
+  "command": "C:\\PROGRA~2\\X86_64~1.0-W\\mingw64\\bin\\G__~1.EXE  @CMakeFiles/app.dir/includes_CXX.rsp -g -o CMakeFiles\\app.dir\\src\\Wandering.cpp.obj -c C:\\Users\\K2\\Desktop\\Pacman-game\\src\\Wandering.cpp",
+  "file": "C:/Users/K2/Desktop/Pacman-game/src/Wandering.cpp"
+},
+{
+  "directory": "C:/Users/K2/Desktop/Pacman-game/build",
+  "command": "C:\\PROGRA~2\\X86_64~1.0-W\\mingw64\\bin\\G__~1.EXE  @CMakeFiles/app.dir/includes_CXX.rsp -g -o CMakeFiles\\app.dir\\src\\Hunter.cpp.obj -c C:\\Users\\K2\\Desktop\\Pacman-game\\src\\Hunter.cpp",
+  "file": "C:/Users/K2/Desktop/Pacman-game/src/Hunter.cpp"
+},
+{
+  "directory": "C:/Users/K2/Desktop/Pacman-game/build",
+  "command": "C:\\PROGRA~2\\X86_64~1.0-W\\mingw64\\bin\\G__~1.EXE  @CMakeFiles/app.dir/includes_CXX.rsp -g -o CMakeFiles\\app.dir\\src\\Scared.cpp.obj -c C:\\Users\\K2\\Desktop\\Pacman-game\\src\\Scared.cpp",
+  "file": "C:/Users/K2/Desktop/Pacman-game/src/Scared.cpp"
+},
+{
+  "directory": "C:/Users/K2/Desktop/Pacman-game/build",
+  "command": "C:\\PROGRA~2\\X86_64~1.0-W\\mingw64\\bin\\G__~1.EXE  @CMakeFiles/app.dir/includes_CXX.rsp -g -o CMakeFiles\\app.dir\\src\\snacks.cpp.obj -c C:\\Users\\K2\\Desktop\\Pacman-game\\src\\snacks.cpp",
+  "file": "C:/Users/K2/Desktop/Pacman-game/src/snacks.cpp"
+},
+{
+  "directory": "C:/Users/K2/Desktop/Pacman-game/build",
+  "command": "C:\\PROGRA~2\\X86_64~1.0-W\\mingw64\\bin\\G__~1.EXE  @CMakeFiles/app.dir/includes_CXX.rsp -g -o CMakeFiles\\app.dir\\src\\power_pellets.cpp.obj -c C:\\Users\\K2\\Desktop\\Pacman-game\\src\\power_pellets.cpp",
+  "file": "C:/Users/K2/Desktop/Pacman-game/src/power_pellets.cpp"
+},
+{
+  "directory": "C:/Users/K2/Desktop/Pacman-game/build",
+  "command": "C:\\PROGRA~2\\X86_64~1.0-W\\mingw64\\bin\\G__~1.EXE  @CMakeFiles/app.dir/includes_CXX.rsp -g -o CMakeFiles\\app.dir\\src\\pellets.cpp.obj -c C:\\Users\\K2\\Desktop\\Pacman-game\\src\\pellets.cpp",
+  "file": "C:/Users/K2/Desktop/Pacman-game/src/pellets.cpp"
+},
+{
+  "directory": "C:/Users/K2/Desktop/Pacman-game/build",
+  "command": "C:\\PROGRA~2\\X86_64~1.0-W\\mingw64\\bin\\G__~1.EXE  @CMakeFiles/app.dir/includes_CXX.rsp -g -o CMakeFiles\\app.dir\\src\\PacMan.cpp.obj -c C:\\Users\\K2\\Desktop\\Pacman-game\\src\\PacMan.cpp",
+  "file": "C:/Users/K2/Desktop/Pacman-game/src/PacMan.cpp"
+},
+{
+  "directory": "C:/Users/K2/Desktop/Pacman-game/build",
+  "command": "C:\\PROGRA~2\\X86_64~1.0-W\\mingw64\\bin\\G__~1.EXE  @CMakeFiles/app.dir/includes_CXX.rsp -g -o CMakeFiles\\app.dir\\src\\ghosts.cpp.obj -c C:\\Users\\K2\\Desktop\\Pacman-game\\src\\ghosts.cpp",
+  "file": "C:/Users/K2/Desktop/Pacman-game/src/ghosts.cpp"
+},
+{
+  "directory": "C:/Users/K2/Desktop/Pacman-game/build",
+  "command": "C:\\PROGRA~2\\X86_64~1.0-W\\mingw64\\bin\\G__~1.EXE  @CMakeFiles/app.dir/includes_CXX.rsp -g -o CMakeFiles\\app.dir\\src\\ghosts_state.cpp.obj -c C:\\Users\\K2\\Desktop\\Pacman-game\\src\\ghosts_state.cpp",
+  "file": "C:/Users/K2/Desktop/Pacman-game/src/ghosts_state.cpp"
+},
+{
+  "directory": "C:/Users/K2/Desktop/Pacman-game/build",
+  "command": "C:\\PROGRA~2\\X86_64~1.0-W\\mingw64\\bin\\G__~1.EXE  @CMakeFiles/app.dir/includes_CXX.rsp -g -o CMakeFiles\\app.dir\\src\\fruits.cpp.obj -c C:\\Users\\K2\\Desktop\\Pacman-game\\src\\fruits.cpp",
+  "file": "C:/Users/K2/Desktop/Pacman-game/src/fruits.cpp"
+}
+]
