@@ -69,6 +69,9 @@ void Map::ToEqualize()
 	}// End for 1
 }// End function ToEqualize
 
+/*
+عملکر این تابع رسم نقشه بازی است
+*/
 void Map::DrowMap(sf::RenderWindow & win)
 {
 	sf::RectangleShape S_wall(sf::Vector2f(Cell_Size, Cell_Size));
@@ -111,4 +114,4 @@ void Map::DrowMap(sf::RenderWindow & win)
 
 		}// End for 2
 	}// End for 1
-}
+} //End function DrowMap
