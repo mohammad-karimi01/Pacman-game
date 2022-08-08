@@ -3,5 +3,7 @@
 سلول ها اساسا در کلاس نقشه استفاده میشوند 
 
 */
-unsigned int Cell_width = 12;
-unsigned int Cell_Height = 12;
+
+#define Cell_Height 21 // ارتفاع نقشه  بدون ضریب اندازه هر سلول
+#define Cell_Weight 21 // عرض نقشه
+#define Cell_Size 30 // اندازه هر سلول با واحد پیکسل
