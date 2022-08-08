@@ -24,6 +24,29 @@ PacMan::~PacMan()
     cout << "Distructor...." << endl;
 }
 
+void PacMan::Set_Speed(int level)
+{
+    float MaxSpeed = static_cast<float>(MAX_SPEED);
+    
+    if (level >= 1 && level <= 4){
+        CurrentSpeed = MaxSpeed * (80/100); 
+    }
+    else if (level >= 5 && level <= 20){
+        CurrentSpeed = MaxSpeed * (90/100); 
+    }
+    else if (level >= 21 && level <= 32){
+        CurrentSpeed = MaxSpeed ; 
+    }
+    else if (level >= 33){
+        CurrentSpeed = MaxSpeed * (90/100); 
+    }
+    else{
+        throw out_of_range("Error: The value of Levels game out of range(Not be negatives number)");
+    }
+}//End function Set_Level
+
+
+
 int PacMan::get_life() const
 {
     return Life;
