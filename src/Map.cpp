@@ -69,6 +69,10 @@ void Map::ToEqualize()
 	}// End for 1
 }// End function ToEqualize
 
+std::array<std::array<Cell, 21ULL>, 21ULL> Map::GetMap()
+{
+	return MainMap;
+}
 /*
 عملکر این تابع رسم نقشه بازی است
 */

@@ -7,17 +7,20 @@
 #include <SFML/Graphics.hpp>
 //#include "Information.hpp"
 #include "Information.hpp"
+enum Cell {Wall, Empty, Pellet, Power_Pellet, Door};
 class Map
 {
     private :
-        enum Cell {Wall, Empty, Pellet, Power_Pellet, Door};
+       
         std::array<std::string, Cell_Height> PatternMap; 
         std::array<std::array<Cell,Cell_Height>, Cell_Weight> MainMap; 
          
-    public :
-        Map();
         void Set_Pattern();
         void ToEqualize();
+    public :
+        Map();
+        
+        std::array<std::array<Cell,Cell_Height>, Cell_Weight> GetMap();
         void DrowMap(sf::RenderWindow & );
         void UpdateMap();
 };
