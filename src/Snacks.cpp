@@ -5,12 +5,9 @@ using namespace std;
 /*
 این تابع اساسا برای محاسبه امتیاز پک من استفاده میشود
 */
-long long int GetScores_Snacks(SnackType type, int num)
+long long int GetScores_Snacks(const SnackType & type, int num)
 {
-    if (num < 1 || num > 4){
-        throw invalid_argument
-        ("Error: Invalide the number of ghosts in function GetScore_Snacks in Snack.cpp file");
-    }
+   
     if (type == SnackType::Pellet){
         return 10;
     }
@@ -36,6 +33,10 @@ long long int GetScores_Snacks(SnackType type, int num)
         return 2000;
     }
     else if (type == SnackType::FrightenedGhosts){
+        if (num < 1 || num > 4){
+            throw invalid_argument
+                ("Error: Invalide the number of ghosts in function GetScore_Snacks in Snack.cpp file");
+        }
         return 200 * num;
     }
     else{
