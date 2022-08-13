@@ -1,13 +1,13 @@
 #ifndef _PACMAN
 #define _PACMAN
-#include "Information.hpp"
-#include "Snacks.hpp"
+//#include "Information.hpp"
+//#include "Snacks.hpp"
 #include <SFML/Graphics.hpp>
 #include "Map.hpp"
 #include <array>
 typedef long long int llint;
 
-enum Directions { Stop, Right, Left, Up, Down};
+enum Directions {Right, Up,Left, Down, Stop};
 
 class PacMan
 {
@@ -18,36 +18,44 @@ private:
     llint Score; // مقدار امتیاز پک من  
     llint HighScore;
     float CurrentSpeed;
-    Directions direction;
-
-    sf::Sprite PacmanShape;
-
+   // Directions direction;
+    Directions Key;
+    int direction;
+    sf::Sprite PacmanSprite;
+    sf::Texture PacmanTexture;
+    int FramNum;
+    float TimeAnime;
 
     ///////////////////
     void set_HighScore();
     void Set_Speed(int level);
-    bool collison(const std::array<std::array<Cell,Cell_Height>, Cell_Weight> &, Directions D);
+    // bool collison(const std::array<std::array<Cell,Cell_Height>, Cell_Weight> &, Directions);
+    //  void collison2(const std::array<std::array<Cell,Cell_Height>, Cell_Weight> &, Directions);
+    void Set_Animation(); // Information of animations Pacman
 public:
     //PacMan(int , int);
     PacMan();
     ~PacMan();
     
     
-    void Update(const std::array<std::array<Cell,Cell_Height>, Cell_Weight> &);
-    void Set_X(float );
-    void Set_Y(float );
+bool map_collision(bool i_collect_pellets, bool i_use_door, short i_x, short i_y, std::array<std::array<Cell,Cell_Height>, Cell_Weight> & i_map);
+void update(unsigned char i_level, std::array<std::array<Cell,Cell_Height>, Cell_Weight> & );
+
+  //  void Update(const std::array<std::array<Cell,Cell_Height>, Cell_Weight> &, int );
+    void Set_X();
+    void Set_Y();
     void Move(int ); // parameter is Game level
-    
+    void Drow(sf::RenderWindow &);
 
     int get_life() const;
-    void set_score(SnackType , int = 0);
+   // void set_score(SnackType , int = 0);
     llint get_score() const;
     llint get_HighScore() const;
     
     void update_HighScore();
     void Destroy();
 
-    void Drow(sf::RenderWindow & );
+    void Drow(sf::RenderWindow & , sf::Time & , sf::Clock &);
 };
 
 #endif
