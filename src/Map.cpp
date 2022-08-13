@@ -53,10 +53,10 @@ void Map::ToEqualize()
 					MainMap[col][row] = Cell::Wall;
 					break;
 				case '.' :
-					MainMap[col][row] = Cell::Pellet;
+					MainMap[col][row] = Cell::Food;
 					break;
 				case '*' :
-					MainMap[col][row] = Cell::Power_Pellet;
+					MainMap[col][row] = Cell::Power_Food;
 					break;
 				case '=' :
 					MainMap[col][row] = Cell::Door;
@@ -69,7 +69,7 @@ void Map::ToEqualize()
 	}// End for 1
 }// End function ToEqualize
 
-std::array<std::array<Cell, 21ULL>, 21ULL> Map::GetMap()
+std::array<std::array<Cell, 21ULL>, 21ULL> & Map::GetMap() 
 {
 	return MainMap;
 }
@@ -81,11 +81,11 @@ void Map::DrowMap(sf::RenderWindow & win)
 	sf::RectangleShape S_wall(sf::Vector2f(Cell_Size, Cell_Size));
 	S_wall.setFillColor(sf::Color::Blue);
 
-	sf::CircleShape S_pellete(2);
-	S_pellete.setFillColor(sf::Color::Yellow);
+	sf::CircleShape S_Foode(2);
+	S_Foode.setFillColor(sf::Color::Yellow);
 
-	sf::CircleShape S_power_pellete(6);
-	S_power_pellete.setFillColor(sf::Color::Yellow);
+	sf::CircleShape S_power_Foode(6);
+	S_power_Foode.setFillColor(sf::Color::Yellow);
 
 	sf::RectangleShape S_door(sf::Vector2f(Cell_Size, Cell_Size/2));
 	S_door.setFillColor(sf::Color::Magenta);
@@ -98,17 +98,17 @@ void Map::DrowMap(sf::RenderWindow & win)
 				S_wall.setPosition(sf::Vector2f(row * Cell_Size, col * Cell_Size));
 				win.draw(S_wall);
 			}
-			if (MainMap[row][col] == Cell::Pellet)
+			if (MainMap[row][col] == Cell::Food)
 			{
-				S_pellete.setPosition
+				S_Foode.setPosition
 				(sf::Vector2f(row * Cell_Size + (Cell_Size/2), col * Cell_Size + (Cell_Size/2)));
-				win.draw(S_pellete);
+				win.draw(S_Foode);
 			}
-			if (MainMap[row][col] == Cell::Power_Pellet)
+			if (MainMap[row][col] == Cell::Power_Food)
 			{
-				S_power_pellete.setPosition
+				S_power_Foode.setPosition
 				(sf::Vector2f(row * Cell_Size + (Cell_Size/2 - 3), col * Cell_Size + (Cell_Size/2 -3 )));
-				win.draw(S_power_pellete);
+				win.draw(S_power_Foode);
 			}
 			if (MainMap[row][col] == Cell::Door)
 			{

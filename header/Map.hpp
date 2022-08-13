@@ -7,7 +7,7 @@
 #include <SFML/Graphics.hpp>
 //#include "Information.hpp"
 #include "Information.hpp"
-enum Cell {Wall, Empty, Pellet, Power_Pellet, Door};
+enum Cell {Wall, Empty, Food, Power_Food, Door};
 class Map
 {
     private :
@@ -20,7 +20,7 @@ class Map
     public :
         Map();
         
-        std::array<std::array<Cell,Cell_Height>, Cell_Weight> GetMap();
+        std::array<std::array<Cell,Cell_Height>, Cell_Weight> & GetMap() ;
         void DrowMap(sf::RenderWindow & );
         void UpdateMap();
 };
