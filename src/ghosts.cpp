@@ -1,11 +1,12 @@
-#include "ghosts.hpp"
+#include "Ghosts.hpp"
 #include <iostream>
+#include <stdexcept>
 using namespace std;
 
-Ghosts::Ghosts(ghosts_state *g, int c)
+Ghosts::Ghosts(GhostsState * S, Color c) : ScaredDuration(sf::seconds(0)), color(c)
 {
-    Change_CurrentState(g);
-    set_color(c);
+    current_state = S;
+    
     set_xy(1, 1);
 }
 void Ghosts::set_xy(int x, int y)
@@ -24,6 +25,7 @@ int Ghosts::get_y() const
     return this->Y;
 }// End function*
 
+/*
 void Ghosts::set_color(int c )
 {
     if (c == 1){
@@ -47,11 +49,61 @@ Color Ghosts::get_color()
 {
     return color;
 }// End function*
+*/
 
-void Ghosts::Change_CurrentState(ghosts_state * NewState )
+GhostsState * Ghosts::SetTimer(int L, sf::Time & ETime) // L is GameLevel --- Etime is ElapcedTime of Game
 {
-    current_state = NewState;
-}// End function*
+    sf::Time temp = sf::seconds(ETime.asSeconds() - ScaredDuration.asSeconds());
+    
+    if (L == 1){
+        if (temp >= sf::seconds(0) && temp <= sf::seconds(7) || 
+            temp >= sf::seconds(27) && temp <= sf::seconds(34) ||
+            temp >= sf::seconds(54) && temp <= sf::seconds(59) ||
+            temp >= sf::seconds(79) && temp <= sf::seconds(84) )
+            {
+                return & wandering; // سرگردان
+            }
+        else {
+            return & chaser; // تعقیب
+
+        }
+    }
+    else if (L >= 2 && L <= 4){
+        if (temp >= sf::seconds(0) && temp <= sf::seconds(7) || 
+            temp >= sf::seconds(27) && temp <= sf::seconds(34) ||
+            temp >= sf::seconds(54) && temp <= sf::seconds(59) ||
+            temp >= sf::seconds(1092) && temp <= sf::seconds(1093.6) )
+            {
+                return & wandering; // سرگردان
+            }
+        else {
+            return & chaser ; // تعقیب
+
+        }
+    }
+    else if ( L >= 5){
+        if (temp >= sf::seconds(0) && temp <= sf::seconds(5) || 
+            temp >= sf::seconds(25) && temp <= sf::seconds(30) ||
+            temp >= sf::seconds(50) && temp <= sf::seconds(55) ||
+            temp >= sf::seconds(1092) && temp <= sf::seconds(1093.6) )
+            {
+                return & wandering; // سرگردان
+            }
+        else {
+            return & chaser; // تعقیب
+
+        }
+    }
+    else{
+        throw invalid_argument
+        ("Error: The number of GameLeve in function SetTimer of class Ghosts is invalid");
+    }
+}// End function SetTimer
+
+void Ghosts::Change_CurrentState(int L, sf::Time & ET )
+{
+    current_state = SetTimer(L, ET);
+}// End function Change_CurrentState
 
 
 void Ghosts::print()
