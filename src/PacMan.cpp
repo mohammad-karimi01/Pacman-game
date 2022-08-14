@@ -133,8 +133,8 @@ void PacMan::Drow(sf::RenderWindow & window ,  sf::Time & ElapcedTime , sf::Cloc
     if (mul == 5){
         mul = 1;
     }
-    sf::Time dt = ck.restart();
-    ElapcedTime += dt;
+    // sf::Time dt = ck.restart();
+    // ElapcedTime += dt;
     float TimeAsSecond = ElapcedTime.asSeconds();
     int AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * FramNum) % FramNum ;
 
