@@ -11,6 +11,7 @@ enum Directions {Right, Up,Left, Down, Stop};
 
 class PacMan
 {
+    
 private:
     float Pos_X; // موقعیت طولی
     float Pos_Y; // موقعیت عرضی
@@ -37,6 +38,7 @@ public:
     PacMan();
     ~PacMan();
     
+    sf::Sprite & GetSprite();
     
 bool map_collision(bool i_collect_pellets, bool i_use_door, short i_x, short i_y, std::array<std::array<Cell,Cell_Height>, Cell_Weight> & i_map);
 void update(unsigned char i_level, std::array<std::array<Cell,Cell_Height>, Cell_Weight> & );
@@ -45,7 +47,7 @@ void update(unsigned char i_level, std::array<std::array<Cell,Cell_Height>, Cell
     void Set_X();
     void Set_Y();
     void Move(int ); // parameter is Game level
-    void Drow(sf::RenderWindow &);
+    //void Drow(sf::RenderWindow &);
 
     int get_life() const;
    // void set_score(SnackType , int = 0);

@@ -318,3 +318,9 @@ void PacMan::update
 	// 	energizer_timer = std::max(0, energizer_timer - 1);
 	// }
 }
+
+
+sf::Sprite &PacMan::GetSprite()
+{
+	return PacmanSprite;
+}
