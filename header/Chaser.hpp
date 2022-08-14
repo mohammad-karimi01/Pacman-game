@@ -1,10 +1,10 @@
-// روح سرگردان
-#ifndef _WANDERING    
-#define _WANDERING 
+// روح شکارچی
+#ifndef _Chaser    
+#define _Chaser 
 #include "GhostsState.hpp"
 
 
-class GhostsWandering : public GhostsState
+class GhostsChaser : public GhostsState
 {
     //private:
 
@@ -14,3 +14,5 @@ class GhostsWandering : public GhostsState
 };
 
 #endif
+
+

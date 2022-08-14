@@ -1,9 +1,9 @@
 #ifndef _SCARED    
 #define _SCARED 
-#include "ghosts_state.hpp"
+#include "GhostsState.hpp"
 
 
-class Scared : public ghosts_state
+class GhostsScared : public GhostsState
 {
     //private:
 
