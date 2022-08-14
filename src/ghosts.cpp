@@ -3,12 +3,39 @@
 #include <stdexcept>
 using namespace std;
 
-Ghosts::Ghosts(GhostsState * S, Color c) : ScaredDuration(sf::seconds(0)), color(c)
+Ghosts::Ghosts( int c) : 
+ScaredDuration(sf::seconds(0)),
+color(c), 
+current_state(&wandering)
 {
-    current_state = S;
-    
-    set_xy(1, 1);
+    float Size = static_cast<float>(Cell_Size);
+    if (c == 0){
+        Pos_X = 10 * Size ;
+        Pos_Y = 7 * Size;
+        Direction = 1;
+    }
+    else if (c == 1){
+        Pos_X = 9 * Size;
+        Pos_Y = 9 * Size;
+        Direction = 1;
+    }
+    else if (c == 2){
+        Pos_X = 10 * Size;
+        Pos_Y = 9 * Size;
+        Direction = 2;
+    }
+    else if (c == 3){
+        Pos_X = 11 * Size;
+        Pos_Y = 9 * Size;
+        Direction = 3;
+    }
+    else{
+        throw invalid_argument("Error: invalid start position of Ghosts in constructors ghosts");
+    }
+    Set_Animation();
 }
+
+/*
 void Ghosts::set_xy(int x, int y)
 {
     this->X = x;
@@ -25,7 +52,7 @@ int Ghosts::get_y() const
     return this->Y;
 }// End function*
 
-/*
+
 void Ghosts::set_color(int c )
 {
     if (c == 1){
@@ -105,25 +132,33 @@ void Ghosts::Change_CurrentState(int L, sf::Time & ET )
     current_state = SetTimer(L, ET);
 }// End function Change_CurrentState
 
-
-void Ghosts::print()
+void Ghosts::Set_Animation()
 {
-    cout << "Information ghosts........................................" << endl;
-    cout << "State: " ;
-    current_state->print();
-    cout << "Color: " ;
-    if (color == 1){
-        cout << "Blinky" ;
-    } 
-    if ( color == 2){
-        cout << "Pinky" ;
+    FramNum = 2; // number of frame in Image Pacman
+    TimeAnime = .5; // Animation durition
+    if (!GhostsTexture.loadFromFile("C:/Users/K2/Desktop/Pacman-game/Ghosts32.png")){
+        throw runtime_error("Ghosts Image can not load");
     }
-    if ( color == 3){
-        cout << "Inky" ;
-    }
-    if ( color == 4){
-        cout << "Clyde" ;
-    }
-    cout << endl << "...................................................." << endl;
+    GhostsSprite.setTexture(GhostsTexture);
+
+}// End function Set_Sprite
+
+void Ghosts::Drow(sf::RenderWindow & window, sf::Time & ElapcedTime)
+{
+    int Size = static_cast<int>(Cell_Size); // this is Cell Size and size of all Ellement
+    float TimeAsSecond = ElapcedTime.asSeconds();
+    int AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * FramNum ) % FramNum ;
+    GhostsSprite.setTextureRect(sf::IntRect((AnimFram * Size) + (Direction * Size * 2), color * Size , Size, Size));
+    GhostsSprite.setPosition(Pos_X, Pos_Y);
+    window.draw(GhostsSprite);
+  //  cout << "Hello" << endl;
+    
+}// End function Drow
+
+/*
+این تابع برخورد پک من با روح هارا بررسی میکند
+*/
+sf::Sprite &Ghosts::GetSprit()
+{
+    return GhostsSprite;
 }
-//Blinky = 1 , Pinky, lnky, Clyde
