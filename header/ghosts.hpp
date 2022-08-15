@@ -47,7 +47,7 @@ public:
 	void Set_Animation();
     void Change_CurrentState( int, sf::Time &);
     void Set_ScaredDuration(int );
-    void Drow(sf::RenderWindow &  ,  sf::Time &, sf::Clock &);
+    void Drow(sf::RenderWindow &  ,  sf::Time &, sf::Time &);
     void Reset(int );
     void SetRestartPos();
     void Set_FrightenedGhosts(bool);

@@ -52,48 +52,7 @@ void Ghosts::SetRestartPos()
     }
 
 }
-/*
-void Ghosts::set_xy(int x, int y)
-{
-    this->X = x;
-    this->Y = y;
-}// End function*
 
-int Ghosts::get_x() const
-{
-    return this->X;
-}
-
-int Ghosts::get_y() const
-{
-    return this->Y;
-}// End function*
-
-
-void Ghosts::set_color(int c )
-{
-    if (c == 1){
-        color = Blinky;
-    }
-    else if(c == 2){
-        color = Pinky;
-    }
-    else if (c == 3){
-        color = Inky;
-    }
-    else if (c == 4){
-        color = Clyde;
-    }
-    else{
-        cerr << "Color is not correct " << endl;
-    }
-}// End function*
-
-Color Ghosts::get_color()
-{
-    return color;
-}// End function*
-*/
 
 GhostsState * Ghosts::SetTimer(int L, sf::Time & ETime) // L is GameLevel --- Etime is ElapcedTime of Game
 {
@@ -167,18 +126,18 @@ void Ghosts::Set_Animation()
 
 }// End function Set_Sprite
 
-void Ghosts::Drow(sf::RenderWindow & window, sf::Time & ElapcedTime, sf::Clock & ck)
+void Ghosts::Drow(sf::RenderWindow & window, sf::Time & ElapcedTime, sf::Time & dt)
 {
     int Size = static_cast<int>(Cell_Size); // this is Cell Size --- size of all Ellement
     float TimeAsSecond = ElapcedTime.asSeconds();
     int AnimFram;
     if (Get_FrightenedGhosts())
     {
-        sf::Time dt = ck.restart();
         ElapcedTime_Scared += dt; // محاسبه مدت زمانی که روح در حالت ترسیده قرار اس بماند
         TotalTimeScared += dt;
         // شرط چشمک زدن روح ترسیده
-        if (ElapcedTime + sf::seconds((TimeAnime/2 + (float)Winking)) >= ScaredDuration )
+        //sf::seconds((TimeAnime/2 + (float)Winking))
+        if (ElapcedTime_Scared + sf::seconds(.5 * Winking) >= ScaredDuration )
         {
             AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * 4 ) % 4 ;
             GhostsSprite.setTextureRect
@@ -192,9 +151,9 @@ void Ghosts::Drow(sf::RenderWindow & window, sf::Time & ElapcedTime, sf::Clock &
 
         }
        
-        if (ElapcedTime >= ScaredDuration)
+        if (ElapcedTime_Scared >= ScaredDuration)
         {
-            ElapcedTime = sf::seconds(0);
+            ElapcedTime_Scared = sf::seconds(0);
             Set_FrightenedGhosts(false);
         }
     }
@@ -206,10 +165,9 @@ void Ghosts::Drow(sf::RenderWindow & window, sf::Time & ElapcedTime, sf::Clock &
 
     }
 
-   
     GhostsSprite.setPosition(Pos_X, Pos_Y);
     window.draw(GhostsSprite);
-  //  cout << "Hello" << endl;
+  
 }// End function Drow
 
 /*
