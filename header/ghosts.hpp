@@ -21,6 +21,7 @@ private:
 
     sf::Time ScaredDuration; // مدت زمان ترسیده بر اساس مرحله
     sf::Time TotalTimeScared; // مجموع مدت زمان حالت ترسیده
+    sf::Time ElapcedTime_Scared; // ذخیره زمان 
     int Winking; // تعداد چشمک هر مرحله
     
     sf::Sprite GhostsSprite;
@@ -46,7 +47,7 @@ public:
 	void Set_Animation();
     void Change_CurrentState( int, sf::Time &);
     void Set_ScaredDuration(int );
-    void Drow(sf::RenderWindow &  ,  sf::Time &);
+    void Drow(sf::RenderWindow &  ,  sf::Time &, sf::Clock &);
     void Reset(int );
     void SetRestartPos();
     void Set_FrightenedGhosts(bool);

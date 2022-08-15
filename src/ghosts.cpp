@@ -167,25 +167,49 @@ void Ghosts::Set_Animation()
 
 }// End function Set_Sprite
 
-void Ghosts::Drow(sf::RenderWindow & window, sf::Time & ElapcedTime)
+void Ghosts::Drow(sf::RenderWindow & window, sf::Time & ElapcedTime, sf::Clock & ck)
 {
+    int Size = static_cast<int>(Cell_Size); // this is Cell Size --- size of all Ellement
+    float TimeAsSecond = ElapcedTime.asSeconds();
+    int AnimFram;
     if (Get_FrightenedGhosts())
     {
+        sf::Time dt = ck.restart();
+        ElapcedTime_Scared += dt; // محاسبه مدت زمانی که روح در حالت ترسیده قرار اس بماند
+        TotalTimeScared += dt;
+        // شرط چشمک زدن روح ترسیده
+        if (ElapcedTime + sf::seconds((TimeAnime/2 + (float)Winking)) >= ScaredDuration )
+        {
+            AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * 4 ) % 4 ;
+            GhostsSprite.setTextureRect
+            (sf::IntRect((AnimFram * Size), 5 * Size , Size, Size));
+        }
+        else
+        {
+            AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * 2 ) % 2 ;
+            GhostsSprite.setTextureRect
+            (sf::IntRect((AnimFram * Size), 5 * Size , Size, Size));
 
+        }
+       
+        if (ElapcedTime >= ScaredDuration)
+        {
+            ElapcedTime = sf::seconds(0);
+            Set_FrightenedGhosts(false);
+        }
     }
     else
     {
+        AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * FramNum ) % FramNum ;
+        GhostsSprite.setTextureRect
+        (sf::IntRect((AnimFram * Size) + (Direction * Size * 2), color * Size , Size, Size));
 
     }
-    
-    int Size = static_cast<int>(Cell_Size); // this is Cell Size --- size of all Ellement
-    float TimeAsSecond = ElapcedTime.asSeconds();
-    int AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * FramNum ) % FramNum ;
-    GhostsSprite.setTextureRect(sf::IntRect((AnimFram * Size) + (Direction * Size * 2), color * Size , Size, Size));
+
+   
     GhostsSprite.setPosition(Pos_X, Pos_Y);
     window.draw(GhostsSprite);
   //  cout << "Hello" << endl;
-    
 }// End function Drow
 
 /*
