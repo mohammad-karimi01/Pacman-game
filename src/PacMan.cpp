@@ -1,5 +1,5 @@
 #include "PacMan.hpp"
-
+#include "TypesOfCollisions.hpp"
 #include <stdexcept>
 #include <fstream>
 #include <iostream>
@@ -149,94 +149,14 @@ void PacMan::Drow(sf::RenderWindow & window ,  sf::Time & ElapcedTime , sf::Cloc
 
 
 
-bool PacMan::map_collision
-(bool i_collect_pellets, bool i_use_door, short i_x, short i_y,std::array<std::array<Cell,Cell_Height>, Cell_Weight> & i_map)
-{
-	bool output = 0;
-
-	//Getting the exact position.
-	float cell_x = i_x / static_cast<float>(Cell_Size);
-	float cell_y = i_y / static_cast<float>(Cell_Size);
-
-	//A ghost/Pacman can intersect 4 cells at most.
-	for (unsigned char a = 0; a < 4; a++)
-	{
-		short x = 0;
-		short y = 0;
-
-		switch (a)
-		{
-			case 0: //Top left cell
-			{
-				x = static_cast<short>(floor(cell_x));
-				y = static_cast<short>(floor(cell_y));
-
-				break;
-			}
-			case 1: //Top right cell
-			{
-				x = static_cast<short>(ceil(cell_x));
-				y = static_cast<short>(floor(cell_y));
-
-				break;
-			}
-			case 2: //Bottom left cell
-			{
-				x = static_cast<short>(floor(cell_x));
-				y = static_cast<short>(ceil(cell_y));
-
-				break;
-			}
-			case 3: //Bottom right cell
-			{
-				x = static_cast<short>(ceil(cell_x));
-				y = static_cast<short>(ceil(cell_y));
-			}
-		}
-
-		//Making sure that the position is inside the map.
-		if (0 <= x && 0 <= y && Cell_Height > y && Cell_Weight > x)
-		{
-			if (0 == i_collect_pellets) //Here we only care about the walls.
-			{
-				if (Cell::Wall == i_map[x][y])
-				{
-					output = 1;
-				}
-				else if (0 == i_use_door && Cell::Door == i_map[x][y])
-				{
-					output = 1;
-				}
-			}
-			else //Here we only care about the collectables.
-			{
-				if (Cell::Power_Food == i_map[x][y])
-				{
-					output = 1;
-
-					i_map[x][y] = Cell::Empty;
-				}
-				else if (Cell::Food == i_map[x][y])
-				{
-					i_map[x][y] = Cell::Empty;
-				}
-			}
-		}
-	}
-
-	return output;
-}
-
-
-
 void PacMan::update
 (unsigned char i_level,std::array<std::array<Cell,Cell_Height>, Cell_Weight> & i_map)
 {
 	std::array<bool, 4> walls{};
-	walls[0] = map_collision(0, 0, CurrentSpeed + Pos_X, Pos_Y, i_map);
-	walls[1] = map_collision(0, 0, Pos_X, Pos_Y - CurrentSpeed, i_map);
-	walls[2] = map_collision(0, 0, Pos_X - CurrentSpeed, Pos_Y, i_map);
-	walls[3] = map_collision(0, 0, Pos_X, CurrentSpeed + Pos_Y, i_map);
+	walls[0] = TypesOfCollisions(0, 0, CurrentSpeed + Pos_X, Pos_Y, i_map);
+	walls[1] = TypesOfCollisions(0, 0, Pos_X, Pos_Y - CurrentSpeed, i_map);
+	walls[2] = TypesOfCollisions(0, 0, Pos_X - CurrentSpeed, Pos_Y, i_map);
+	walls[3] = TypesOfCollisions(0, 0, Pos_X, CurrentSpeed + Pos_Y, i_map);
 
 	if (1 == sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
@@ -299,7 +219,8 @@ void PacMan::update
 		}
 	}
 
-	if (-Cell_Size >= Pos_X)
+// تنظیم حرکت در تونل ها
+	if (-Cell_Size >= Pos_X) 
 	{
 		Pos_X = Cell_Size * Cell_Weight - CurrentSpeed;
 	}
@@ -308,7 +229,7 @@ void PacMan::update
 		Pos_X = CurrentSpeed - Cell_Size;
 	}
 
-	// if (1 == map_collision(1, 0, Pos_X, Pos_Y, i_map)) //When Pacman eats an energizer...
+	// if (1 == TypesOfCollisions(1, 0, Pos_X, Pos_Y, i_map)) //When Pacman eats an energizer...
 	// {
 	// 	//He becomes energized!
 	// 	energizer_timer = static_cast<unsigned short>(ENERGIZER_DURATION / pow(2, i_level));

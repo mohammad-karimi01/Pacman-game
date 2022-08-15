@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include "Map.hpp"
 #include <array>
+
 typedef long long int llint;
 
 enum Directions {Right, Up,Left, Down, Stop};
@@ -40,8 +41,7 @@ public:
     
     sf::Sprite & GetSprite();
     
-bool map_collision(bool i_collect_pellets, bool i_use_door, short i_x, short i_y, std::array<std::array<Cell,Cell_Height>, Cell_Weight> & i_map);
-void update(unsigned char i_level, std::array<std::array<Cell,Cell_Height>, Cell_Weight> & );
+    void update(unsigned char i_level, std::array<std::array<Cell,Cell_Height>, Cell_Weight> & );
 
   //  void Update(const std::array<std::array<Cell,Cell_Height>, Cell_Weight> &, int );
     void Set_X();
