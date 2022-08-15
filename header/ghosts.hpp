@@ -15,10 +15,15 @@ class Ghosts
 private:
     int Pos_X; // موقعیت طولی
     int Pos_Y; // موقعیت عرضی
-    int color; // Blinky = 0 , Pinky, Inky, Clyde
+    const int color; // Blinky = 0 , Pinky, Inky, Clyde
     int Direction; // Right = 1, Up = 2, Left = 3, Down = 4
-    sf::Time ScaredDuration; // مجموع مدت زمان حالت ترسیده
-	sf::Sprite GhostsSprite;
+    bool FrightenedGhosts; // if Ghosts be Scared
+
+    sf::Time ScaredDuration; // مدت زمان ترسیده بر اساس مرحله
+    sf::Time TotalTimeScared; // مجموع مدت زمان حالت ترسیده
+    int Winking; // تعداد چشمک هر مرحله
+    
+    sf::Sprite GhostsSprite;
 	sf::Texture GhostsTexture;
 	int FramNum;
 	float TimeAnime;
@@ -27,9 +32,9 @@ private:
     GhostsScared  scared;
     GhostsWandering wandering;
     GhostsChaser chaser;
-    ////////////////////////////////////////////////////////// 
+    //////////////////////////////////////////////////////////
     GhostsState * SetTimer(int, sf::Time & ); // محاسبه زمان تغییر حالت ها
-    void set_color(int ); // need change --- int > Color
+    
 public:
     Ghosts(int );
     void set_xy(int, int);
@@ -40,8 +45,12 @@ public:
   //  Color get_color();
 	void Set_Animation();
     void Change_CurrentState( int, sf::Time &);
-    
+    void Set_ScaredDuration(int );
     void Drow(sf::RenderWindow &  ,  sf::Time &);
+    void Reset(int );
+    void SetRestartPos();
+    void Set_FrightenedGhosts(bool);
+    bool Get_FrightenedGhosts();
 };
 
 #endif

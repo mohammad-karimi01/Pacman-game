@@ -4,27 +4,45 @@
 using namespace std;
 
 Ghosts::Ghosts( int c) : 
-ScaredDuration(sf::seconds(0)),
+TotalTimeScared(sf::seconds(0)),
 color(c), 
+FrightenedGhosts(false),
 current_state(&wandering)
 {
+    
+    SetRestartPos();
+    Set_Animation();
+    Set_ScaredDuration(1);
+}
+
+void Ghosts::Set_FrightenedGhosts(bool F)
+{
+    FrightenedGhosts = F;
+}
+bool Ghosts::Get_FrightenedGhosts()
+{
+    return FrightenedGhosts;
+}
+
+void Ghosts::SetRestartPos()
+{
     float Size = static_cast<float>(Cell_Size);
-    if (c == 0){
+    if (color == 0){
         Pos_X = 10 * Size ;
         Pos_Y = 7 * Size;
         Direction = 1;
     }
-    else if (c == 1){
+    else if (color == 1){
         Pos_X = 9 * Size;
         Pos_Y = 9 * Size;
         Direction = 1;
     }
-    else if (c == 2){
+    else if (color == 2){
         Pos_X = 10 * Size;
         Pos_Y = 9 * Size;
         Direction = 2;
     }
-    else if (c == 3){
+    else if (color == 3){
         Pos_X = 11 * Size;
         Pos_Y = 9 * Size;
         Direction = 3;
@@ -32,9 +50,8 @@ current_state(&wandering)
     else{
         throw invalid_argument("Error: invalid start position of Ghosts in constructors ghosts");
     }
-    Set_Animation();
-}
 
+}
 /*
 void Ghosts::set_xy(int x, int y)
 {
@@ -80,7 +97,7 @@ Color Ghosts::get_color()
 
 GhostsState * Ghosts::SetTimer(int L, sf::Time & ETime) // L is GameLevel --- Etime is ElapcedTime of Game
 {
-    sf::Time temp = sf::seconds(ETime.asSeconds() - ScaredDuration.asSeconds());
+    sf::Time temp = sf::seconds(ETime.asSeconds() - TotalTimeScared.asSeconds());
     
     if (L == 1){
         if (temp >= sf::seconds(0) && temp <= sf::seconds(7) || 
@@ -129,7 +146,14 @@ GhostsState * Ghosts::SetTimer(int L, sf::Time & ETime) // L is GameLevel --- Et
 
 void Ghosts::Change_CurrentState(int L, sf::Time & ET )
 {
-    current_state = SetTimer(L, ET);
+    if (Get_FrightenedGhosts())
+    {
+        current_state = & scared;
+    }
+    else{
+        current_state = SetTimer(L, ET);
+    }
+    
 }// End function Change_CurrentState
 
 void Ghosts::Set_Animation()
@@ -145,7 +169,16 @@ void Ghosts::Set_Animation()
 
 void Ghosts::Drow(sf::RenderWindow & window, sf::Time & ElapcedTime)
 {
-    int Size = static_cast<int>(Cell_Size); // this is Cell Size and size of all Ellement
+    if (Get_FrightenedGhosts())
+    {
+
+    }
+    else
+    {
+
+    }
+    
+    int Size = static_cast<int>(Cell_Size); // this is Cell Size --- size of all Ellement
     float TimeAsSecond = ElapcedTime.asSeconds();
     int AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * FramNum ) % FramNum ;
     GhostsSprite.setTextureRect(sf::IntRect((AnimFram * Size) + (Direction * Size * 2), color * Size , Size, Size));
@@ -161,4 +194,64 @@ void Ghosts::Drow(sf::RenderWindow & window, sf::Time & ElapcedTime)
 sf::Sprite &Ghosts::GetSprit()
 {
     return GhostsSprite;
+}
+
+void Ghosts::Reset(int L) // L is LevelGame
+{
+    SetRestartPos();
+    Set_ScaredDuration(L);
+    TotalTimeScared = sf::seconds(0);
+    FrightenedGhosts = false;
+}
+
+void Ghosts::Set_ScaredDuration(int L)
+{
+    if (L == 1){
+        ScaredDuration = sf::seconds(6);
+        Winking = 5;
+    }
+    else if (L == 2){
+        ScaredDuration = sf::seconds(5);
+        Winking = 5;        
+    }
+    else if (L == 3){
+        ScaredDuration = sf::seconds(4);
+        Winking = 5;            
+    }
+    else if (L == 4){
+        ScaredDuration = sf::seconds(3);
+        Winking = 4;            
+    }
+    else if (L == 5){
+        ScaredDuration = sf::seconds(2);
+        Winking = 4;            
+    }
+    else if (L >= 6 && L <= 10){
+        ScaredDuration = sf::seconds(4);
+        Winking = 5;            
+    }
+    else if (L >= 11 && L <= 16){
+        ScaredDuration = sf::seconds(3);
+        Winking = 4;            
+    }
+    else if (L >= 17 && L <= 32){
+        ScaredDuration = sf::seconds(2);
+        Winking = 4;            
+    }
+    else if (L >= 33 && L <= 64){
+        ScaredDuration = sf::seconds(1);
+        Winking = 3;            
+    }
+    else if (L == 128){
+        ScaredDuration = sf::seconds(0);
+        Winking = 0;            
+    }
+    else if (L > 128 || (L >=65 && L < 128) ){
+        ScaredDuration = sf::seconds(0);
+        Winking = 0;
+    }
+    else {
+        throw invalid_argument("Error: invalid number of LevelGame in function Set_ScaredDuration");
+    }
+
 }
