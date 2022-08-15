@@ -64,7 +64,7 @@ bool TypesOfCollisions
 
         if (0 <= x && 0 <= y && Cell_Height > y && Cell_Weight > x)
 		{
-			if (!EatPellets) 
+			if (!EatPellets && !EatPowerPellets) 
 			{
 				if (Cell::Wall == GameMap[x][y])
 				{
@@ -75,23 +75,26 @@ bool TypesOfCollisions
 				// 	output = 1;
 				// }
 			}
-			else 
+			else if (EatPellets && !EatPowerPellets)
+			{
+				if (Cell::Food == GameMap[x][y])
+				{
+					GameMap[x][y] = Cell::Empty;
+					output = true;
+				}
+			}
+			else if (!EatPellets && EatPowerPellets) 
 			{
 				if (Cell::Power_Food == GameMap[x][y])
 				{
 					output = true;
-
 					GameMap[x][y] = Cell::Empty;
-				}
-				else if (Cell::Food == GameMap[x][y])
-				{
-					GameMap[x][y] = Cell::Empty;
-                    return true;
 				}
 			}
 		}
-    }// End for 1
-
+    }
+	
 	return output;
+
 }//End function TypesOfCollisions
 
