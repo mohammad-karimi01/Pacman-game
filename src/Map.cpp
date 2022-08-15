@@ -81,10 +81,10 @@ void Map::DrowMap(sf::RenderWindow & win)
 	sf::RectangleShape S_wall(sf::Vector2f(Cell_Size, Cell_Size));
 	S_wall.setFillColor(sf::Color::Blue);
 
-	sf::CircleShape S_Foode(2);
+	sf::RectangleShape S_Foode(sf::Vector2f(6,6));
 	S_Foode.setFillColor(sf::Color::Yellow);
 
-	sf::CircleShape S_power_Foode(6);
+	sf::CircleShape S_power_Foode(8);
 	S_power_Foode.setFillColor(sf::Color::Yellow);
 
 	sf::RectangleShape S_door(sf::Vector2f(Cell_Size, Cell_Size/2));
@@ -107,7 +107,7 @@ void Map::DrowMap(sf::RenderWindow & win)
 			if (MainMap[row][col] == Cell::Power_Food)
 			{
 				S_power_Foode.setPosition
-				(sf::Vector2f(row * Cell_Size + (Cell_Size/2 - 3), col * Cell_Size + (Cell_Size/2 -3 )));
+				(sf::Vector2f(row * Cell_Size + (Cell_Size/2 -7), col * Cell_Size + (Cell_Size/2 - 7 )));
 				win.draw(S_power_Foode);
 			}
 			if (MainMap[row][col] == Cell::Door)
