@@ -10,12 +10,13 @@
 #include "PacMan.hpp"
 #include "Ghosts.hpp"
 //#include "Snacks.hpp"
+//#include "TypesOfCollisions.hpp"
 using namespace std;
 
 int GameLevel = 1;
+//هنگام تغیر مرحله زمان سیستم رو هم ریست کن برای کلاس روح الزامیه
 
-
-
+// از این تابع برای بررسی برخورد یا شکار پک من توسط روح استفاده میشود
 bool Hunt(sf::Sprite & Spacman, sf::Sprite & Sghosts)
 {
     if (Spacman.getGlobalBounds().intersects(Sghosts.getGlobalBounds())){
@@ -24,7 +25,8 @@ bool Hunt(sf::Sprite & Spacman, sf::Sprite & Sghosts)
     else{
         return false;
     }
-}
+}// End function Hunt
+
 int main()
 {
     unsigned char ch = 1;
@@ -56,25 +58,34 @@ int main()
                 window.close();
             }
         }
-        //Player.Move(GameLevel);
+        // Check collison pacman and ghosts
+        if (Player.SetScore(GameMap.GetMap()))
+        {
+            //cout << "############333";
+            Blinky.Set_FrightenedGhosts(true);
+            Pinky.Set_FrightenedGhosts(true);
+            Inky.Set_FrightenedGhosts(true);
+            Clyde.Set_FrightenedGhosts(true);
+        }
+
+        // if (Hunt(Player.GetSprite(), Blinky.GetSprit()) ||
+        //     Hunt(Player.GetSprite(), Pinky.GetSprit()) ||
+        //     Hunt(Player.GetSprite(), Inky.GetSprit()) ||
+        //     Hunt(Player.GetSprite(), Clyde.GetSprit())  )
+        // {
+        //     Player.Destroy();
+        // }
         Player.update(ch, GameMap.GetMap());
         window.clear(sf::Color::Black);
         
         GameMap.DrowMap(window);
         Player.Drow(window, ElapcedTime, ck);
-        Blinky.Drow(window, ElapcedTime);
-        Pinky.Drow(window, ElapcedTime);
-        Inky.Drow(window, ElapcedTime);
-        Clyde.Drow(window, ElapcedTime);
+        Blinky.Drow(window, ElapcedTime , dt);
+        Pinky.Drow(window, ElapcedTime, dt);
+        Inky.Drow(window, ElapcedTime, dt);
+        Clyde.Drow(window, ElapcedTime, dt);
         
-
-        if (Hunt(Player.GetSprite(), Blinky.GetSprit()) ||
-            Hunt(Player.GetSprite(), Pinky.GetSprit()) ||
-            Hunt(Player.GetSprite(), Inky.GetSprit()) ||
-            Hunt(Player.GetSprite(), Clyde.GetSprit())  )
-        {
-            cout << "Barkhorddddddddddddddddddd" << endl;
-        }
+       
        // GameMap.DrowMap(window);
         window.display();
     }
