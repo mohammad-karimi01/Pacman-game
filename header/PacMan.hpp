@@ -27,37 +27,42 @@ private:
     sf::Texture PacmanTexture;
     int FramNum;
     float TimeAnime;
+    bool Die; // this member set when pacman hunt by ghosts
+    bool EatPowerPellet; // this member set when eating Power pellet by pacman
 
-    ///////////////////
+	///////////////////
     void set_HighScore();
     void Set_Speed(int level);
-    // bool collison(const std::array<std::array<Cell,Cell_Height>, Cell_Weight> &, Directions);
-    //  void collison2(const std::array<std::array<Cell,Cell_Height>, Cell_Weight> &, Directions);
+   
     void Set_Animation(); // Information of animations Pacman
+    void SetStartPos(); // when pacman is start game or die by ghosts this function reset the pacman position
 public:
     //PacMan(int , int);
     PacMan();
     ~PacMan();
     
-    sf::Sprite & GetSprite();
     
-    void update(unsigned char i_level, std::array<std::array<Cell,Cell_Height>, Cell_Weight> & );
+	void Reset();
 
-  //  void Update(const std::array<std::array<Cell,Cell_Height>, Cell_Weight> &, int );
-    void Set_X();
-    void Set_Y();
-    void Move(int ); // parameter is Game level
-    //void Drow(sf::RenderWindow &);
-
+    void Set_EatPowerPellet(bool );
+    bool Get_EatPowerPellet();
+   
+    
     int get_life() const;
-   // void set_score(SnackType , int = 0);
+    
     llint get_score() const;
     llint get_HighScore() const;
     
     void update_HighScore();
     void Destroy();
 
+	sf::Sprite & GetSprite(); // this function use in function hunt in main file
     void Drow(sf::RenderWindow & , sf::Time & , sf::Clock &);
+
+	// this get LevelGame and MapGame then Update the changes
+	void update(const int , std::array<std::array<Cell,Cell_Height>, Cell_Weight> & );
+	void SetScore(std::array<std::array<Cell,Cell_Height>, Cell_Weight> & );
+
 };
 
 #endif

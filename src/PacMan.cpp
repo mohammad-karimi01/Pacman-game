@@ -10,17 +10,18 @@
 using namespace std;
 
  
-PacMan::PacMan(): Score(0) 
+PacMan::PacMan(): Score(0),  
+EatPowerPellet(false), 
+Die(false)
 {
-    Set_X();// Set position X of Pacman
-    Set_Y(); // Set position Y of Pacman
+	SetStartPos();
     Set_Animation(); // Set Informations animation of pacman
     set_HighScore();
     Life = 4; 
     CurrentSpeed = 2;
     direction = Right;
     Key = Right;
-    cout << "Pos_X : " << Pos_X << "    Pos_Y :" << Pos_Y << endl;
+    //cout << "Pos_X : " << Pos_X << "    Pos_Y :" << Pos_Y << endl;
 }
 
 PacMan::~PacMan()
@@ -28,14 +29,37 @@ PacMan::~PacMan()
     cout << "Distructor...." << endl;
 }
 
-
-void PacMan::Set_X()
+// when pacman is start game or die by ghosts this function reset the pacman position
+void PacMan::SetStartPos()
 {
-    Pos_X = static_cast<float>(PacManStartGame_X * Cell_Size);
+	Pos_X = Pos_X = static_cast<float>(PacManStartGame_X * Cell_Size);
+	Pos_Y = static_cast<float>(PacManStartGame_Y * Cell_Size);
 }
-void PacMan::Set_Y()
+
+void PacMan::Set_EatPowerPellet(bool E)
 {
-    Pos_Y = static_cast<float>(PacManStartGame_Y * Cell_Size);
+	EatPowerPellet = E;
+}
+bool PacMan::Get_EatPowerPellet()
+{
+	return EatPowerPellet;
+}
+
+// this function use in function hunt in main file
+sf::Sprite &PacMan::GetSprite()
+{
+	return PacmanSprite;
+}
+// this function update score when pacman eat pellet or power pellet
+void PacMan::SetScore(std::array<std::array<Cell,Cell_Height>, Cell_Weight> & Gmap)
+{
+	if (TypesOfCollisions(1, 0, Pos_X, Pos_Y, Gmap)){
+		Score += 10; 
+	}
+	if (TypesOfCollisions(0, 1, Pos_X, Pos_Y, Gmap)){
+		Score += 50;
+		EatPowerPellet = true; // برای تغییر حالت ارواح به ترسیده
+	}
 }
 
 void PacMan::set_HighScore()
@@ -73,6 +97,7 @@ void PacMan::update_HighScore()
 
 }// End function*
 
+// this function get game level and update pacman speed
 void PacMan::Set_Speed(int level)
 {
     float MaxSpeed = static_cast<float>(MAX_SPEED);
@@ -107,12 +132,12 @@ snacks.hpp && .cpp
 
 void PacMan::Destroy()
 {
+	Die = true;
     Life--;
     if (Life == 0)
     {
         cout << "GAME OVER !" << endl;
     }
-
 }// End function Destroy
 
 
@@ -129,28 +154,30 @@ void PacMan::Set_Animation()
 void PacMan::Drow(sf::RenderWindow & window ,  sf::Time & ElapcedTime , sf::Clock & ck)
 {
     int Size = static_cast<int>(Cell_Size); // this is Cell Size and size of all Ellement
-    int mul = static_cast<int>(direction); // for Choice the row of the image Pacman
-    if (mul == 5){
-        mul = 1;
-    }
-    // sf::Time dt = ck.restart();
-    // ElapcedTime += dt;
-    float TimeAsSecond = ElapcedTime.asSeconds();
-    int AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * FramNum) % FramNum ;
+	float TimeAsSecond = ElapcedTime.asSeconds();
+	int AnimFram;
+    if (Die){
+		// framenum = 11
+		// timeanime = 1.2
+		AnimFram = static_cast<int>((TimeAsSecond / 1.2) * 11) % 11 ;
+		PacmanSprite.setTextureRect(sf::IntRect(AnimFram * Size, 4 * Size , Size, Size));
 
-    PacmanSprite.setTextureRect(sf::IntRect(AnimFram * Size, mul * Size , Size, Size));
+	}
+	else{
+		
+		AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * FramNum) % FramNum ;
+		PacmanSprite.setTextureRect(sf::IntRect(AnimFram * Size, direction * Size , Size, Size));
+	}
+		PacmanSprite.setPosition(Pos_X, Pos_Y);
 
-    PacmanSprite.setPosition(Pos_X, Pos_Y);
+		window.draw(PacmanSprite);
+	
     
-    window.draw(PacmanSprite);
    // cout << Pos_X << "\t" << Pos_Y << endl;
 }
 
-
-
-
 void PacMan::update
-(unsigned char i_level,std::array<std::array<Cell,Cell_Height>, Cell_Weight> & i_map)
+(const int level,std::array<std::array<Cell,Cell_Height>, Cell_Weight> & i_map)
 {
 	std::array<bool, 4> walls{};
 	walls[0] = TypesOfCollisions(0, 0, CurrentSpeed + Pos_X, Pos_Y, i_map);
@@ -218,7 +245,6 @@ void PacMan::update
 			}
 		}
 	}
-
 // تنظیم حرکت در تونل ها
 	if (-Cell_Size >= Pos_X) 
 	{
@@ -240,8 +266,12 @@ void PacMan::update
 	// }
 }
 
-
-sf::Sprite &PacMan::GetSprite()
+// Reset the data of pacman after its death
+void PacMan::Reset()
 {
-	return PacmanSprite;
+	SetStartPos();
+	Die = false;
+	direction = 0; // is Right
+	EatPowerPellet = false;
+
 }
