@@ -1,3 +1,5 @@
+#pragma onec
+
 #include <array>
 #include <cmath>
 #include "Map.hpp"
@@ -89,4 +91,7 @@ bool TypesOfCollisions
 			}
 		}
     }// End for 1
+
+	return output;
 }//End function TypesOfCollisions
+
