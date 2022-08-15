@@ -51,15 +51,19 @@ sf::Sprite &PacMan::GetSprite()
 	return PacmanSprite;
 }
 // this function update score when pacman eat pellet or power pellet
-void PacMan::SetScore(std::array<std::array<Cell,Cell_Height>, Cell_Weight> & Gmap)
+bool PacMan::SetScore(std::array<std::array<Cell,Cell_Height>, Cell_Weight> & Gmap)
 {
-	if (TypesOfCollisions(1, 0, Pos_X, Pos_Y, Gmap)){
+	bool output = false;
+	if (TypesOfCollisions(true, false, Pos_X, Pos_Y, Gmap)){
 		Score += 10; 
+		//output = false;
 	}
-	if (TypesOfCollisions(0, 1, Pos_X, Pos_Y, Gmap)){
+	else if (TypesOfCollisions(false, true, Pos_X, Pos_Y, Gmap)){
 		Score += 50;
 		EatPowerPellet = true; // برای تغییر حالت ارواح به ترسیده
+		output = true;
 	}
+	return output;
 }
 
 void PacMan::set_HighScore()
@@ -119,17 +123,6 @@ void PacMan::Set_Speed(int level)
     }
 }//End function Set_Level
 
-/*
-این تابع با استفاده از توابع تعریف شده در هدر 
-snacks.hpp && .cpp
-اقدام به محاسبه ی امتیاز پک من در حین بازی میکند
-*/
-// void PacMan::set_score(SnackType type, int num)
-// {
-//     Score += GetScores_Snacks(type, num); // this function define in header snakc.hpp
-// }// End function SetScore
-
-
 void PacMan::Destroy()
 {
 	Die = true;
@@ -171,14 +164,14 @@ void PacMan::Drow(sf::RenderWindow & window ,  sf::Time & ElapcedTime , sf::Cloc
 		PacmanSprite.setPosition(Pos_X, Pos_Y);
 
 		window.draw(PacmanSprite);
-	
-    
+	   
    // cout << Pos_X << "\t" << Pos_Y << endl;
 }
 
 void PacMan::update
 (const int level,std::array<std::array<Cell,Cell_Height>, Cell_Weight> & i_map)
 {
+	
 	std::array<bool, 4> walls{};
 	walls[0] = TypesOfCollisions(0, 0, CurrentSpeed + Pos_X, Pos_Y, i_map);
 	walls[1] = TypesOfCollisions(0, 0, Pos_X, Pos_Y - CurrentSpeed, i_map);
@@ -216,13 +209,15 @@ void PacMan::update
 			direction = 3;
 		}
 	}
-
+	
+    
 	if (0 == walls[direction])
 	{
 		switch (direction)
 		{
 			case 0:
 			{
+				
 				Pos_X += CurrentSpeed;
 
 				break;
@@ -255,15 +250,7 @@ void PacMan::update
 		Pos_X = CurrentSpeed - Cell_Size;
 	}
 
-	// if (1 == TypesOfCollisions(1, 0, Pos_X, Pos_Y, i_map)) //When Pacman eats an energizer...
-	// {
-	// 	//He becomes energized!
-	// 	energizer_timer = static_cast<unsigned short>(ENERGIZER_DURATION / pow(2, i_level));
-	// }
-	// else
-	// {
-	// 	energizer_timer = std::max(0, energizer_timer - 1);
-	// }
+	
 }
 
 // Reset the data of pacman after its death

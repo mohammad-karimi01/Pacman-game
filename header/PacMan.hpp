@@ -61,7 +61,7 @@ public:
 
 	// this get LevelGame and MapGame then Update the changes
 	void update(const int , std::array<std::array<Cell,Cell_Height>, Cell_Weight> & );
-	void SetScore(std::array<std::array<Cell,Cell_Height>, Cell_Weight> & );
+	bool SetScore(std::array<std::array<Cell,Cell_Height>, Cell_Weight> & );
 
 };
 
