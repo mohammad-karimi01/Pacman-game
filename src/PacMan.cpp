@@ -251,7 +251,7 @@ void PacMan::update
 	}
 
 	
-}
+}// End function update ----------
 
 // Reset the data of pacman after its death
 void PacMan::Reset()

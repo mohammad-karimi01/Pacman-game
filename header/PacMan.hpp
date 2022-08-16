@@ -1,11 +1,8 @@
 #ifndef _PACMAN
 #define _PACMAN
-//#include "Information.hpp"
-//#include "Snacks.hpp"
 #include <SFML/Graphics.hpp>
 #include "Map.hpp"
 #include <array>
-
 typedef long long int llint;
 
 enum Directions {Right, Up,Left, Down, Stop};
