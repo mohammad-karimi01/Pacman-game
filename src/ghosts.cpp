@@ -7,7 +7,7 @@ Ghosts::Ghosts( int c) :
 TotalTimeScared(sf::seconds(0)),
 color(c), 
 FrightenedGhosts(false),
-current_state(&wandering)
+current_state(Wandering)
 {
     
     SetRestartPos();
@@ -54,7 +54,7 @@ void Ghosts::SetRestartPos()
 }
 
 
-GhostsState * Ghosts::SetTimer(int L, sf::Time & ETime) // L is GameLevel --- Etime is ElapcedTime of Game
+GhostsState  Ghosts::SetTimer(int L, sf::Time & ETime) // L is GameLevel --- Etime is ElapcedTime of Game
 {
     sf::Time temp = sf::seconds(ETime.asSeconds() - TotalTimeScared.asSeconds());
     
@@ -64,10 +64,10 @@ GhostsState * Ghosts::SetTimer(int L, sf::Time & ETime) // L is GameLevel --- Et
             temp >= sf::seconds(54) && temp <= sf::seconds(59) ||
             temp >= sf::seconds(79) && temp <= sf::seconds(84) )
             {
-                return & wandering; // سرگردان
+                return Wandering; // سرگردان
             }
         else {
-            return & chaser; // تعقیب
+            return Chaser; // تعقیب
 
         }
     }
@@ -77,10 +77,10 @@ GhostsState * Ghosts::SetTimer(int L, sf::Time & ETime) // L is GameLevel --- Et
             temp >= sf::seconds(54) && temp <= sf::seconds(59) ||
             temp >= sf::seconds(1092) && temp <= sf::seconds(1093.6) )
             {
-                return & wandering; // سرگردان
+                return Wandering; // سرگردان
             }
         else {
-            return & chaser ; // تعقیب
+            return Chaser ; // تعقیب
 
         }
     }
@@ -90,10 +90,10 @@ GhostsState * Ghosts::SetTimer(int L, sf::Time & ETime) // L is GameLevel --- Et
             temp >= sf::seconds(50) && temp <= sf::seconds(55) ||
             temp >= sf::seconds(1092) && temp <= sf::seconds(1093.6) )
             {
-                return & wandering; // سرگردان
+                return Wandering; // سرگردان
             }
         else {
-            return & chaser; // تعقیب
+            return Chaser; // تعقیب
 
         }
     }
@@ -107,7 +107,7 @@ void Ghosts::Change_CurrentState(int L, sf::Time & ET )
 {
     if (Get_FrightenedGhosts())
     {
-        current_state = & scared;
+        current_state = Scared;
     }
     else{
         current_state = SetTimer(L, ET);
@@ -234,6 +234,56 @@ void Ghosts::Set_ScaredDuration(int L)
     }
     else {
         throw invalid_argument("Error: invalid number of LevelGame in function Set_ScaredDuration");
+    }
+
+}
+
+
+void Ghosts::SetSpeed(int L)
+{
+    bool Tunel = false;
+    if ((Pos_Y == 9 * Cell_Size) && 
+        ( (Pos_X < 4 * Cell_Size) || (Pos_X > 16 * Cell_Size) ) )
+    {
+        Tunel = true;
+    }
+
+    if (L >= 1 && L <= 4){
+       if (Get_FrightenedGhosts()){
+           CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)50/100);
+       }
+       else if (Tunel){
+            CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)40/100);
+
+       }
+       else{
+           CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)75/100);
+       }
+    }
+    else if (L >= 5 && L <= 20){
+         if (Get_FrightenedGhosts()){
+           CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)55/100);
+       }
+       else if (Tunel){
+            CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)45/100);
+
+       }
+       else{
+           CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)85/100);
+       }
+    }
+    else if (L >= 21){
+        if (Get_FrightenedGhosts()){
+           CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)60/100);
+       }
+       else if (Tunel){
+            CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)50/100);
+
+       }
+       else{
+           CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)95/100);
+       }
+
     }
 
 }

@@ -1,14 +1,16 @@
 #ifndef _GHOSTS
 #define _GHOSTS
-#include "GhostsState.hpp"
-#include "Chaser.hpp"
-#include "Wandering.hpp"
-#include "Scared.hpp"
+//#include "GhostsState.hpp"
+// #include "Chaser.hpp"
+// #include "Wandering.hpp"
+// #include "Scared.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include "Information.hpp"
 #include "PacMan.hpp"
 
+
+enum GhostsState {Wandering , Chaser , Scared};
 class Ghosts
 {
     
@@ -18,7 +20,7 @@ private:
     const int color; // Blinky = 0 , Pinky, Inky, Clyde
     int Direction; // Right = 1, Up = 2, Left = 3, Down = 4
     bool FrightenedGhosts; // if Ghosts be Scared
-
+    float CurrentSpeed;
     sf::Time ScaredDuration; // مدت زمان ترسیده بر اساس مرحله
     sf::Time TotalTimeScared; // مجموع مدت زمان حالت ترسیده
     sf::Time ElapcedTime_Scared; // ذخیره زمان 
@@ -28,13 +30,13 @@ private:
 	sf::Texture GhostsTexture;
 	int FramNum;
 	float TimeAnime;
-    GhostsState * current_state; // حالت جاری روح که شامل ترسیده یا سرگردان یا تعقیب است
+    GhostsState  current_state; // حالت جاری روح که شامل ترسیده یا سرگردان یا تعقیب است
     //////////////////////////////////////////////////////////
-    GhostsScared  scared;
-    GhostsWandering wandering;
-    GhostsChaser chaser;
+    // GhostsScared  scared;
+    // GhostsWandering wandering;
+    // GhostsChaser chaser;
     //////////////////////////////////////////////////////////
-    GhostsState * SetTimer(int, sf::Time & ); // محاسبه زمان تغییر حالت ها
+    GhostsState  SetTimer(int, sf::Time & ); // محاسبه زمان تغییر حالت ها
     
 public:
     Ghosts(int );
@@ -52,6 +54,9 @@ public:
     void SetRestartPos();
     void Set_FrightenedGhosts(bool);
     bool Get_FrightenedGhosts();
+    void SetSpeed(int ); // Set current speed based on argument GameLevel
+
+    void Update();
 };
 
 #endif
