@@ -1,11 +1,8 @@
 #ifndef MAP_HPP
 #define MAP_HPP
-
-
 #include <array>
 #include <string>
 #include <SFML/Graphics.hpp>
-//#include "Information.hpp"
 #include "Information.hpp"
 enum Cell {Wall, Empty, Food, Power_Food, Door};
 class Map
