@@ -38,7 +38,8 @@ public:
     PacMan();
     ~PacMan();
     
-    
+    float Get_PosX();
+    float Get_PosY();
 	void Reset();
 
     void Set_EatPowerPellet(bool );
