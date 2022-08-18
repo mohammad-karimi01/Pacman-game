@@ -17,9 +17,9 @@ int GameLevel = 1;
 //هنگام تغیر مرحله زمان سیستم رو هم ریست کن برای کلاس روح الزامیه
 
 // از این تابع برای بررسی برخورد یا شکار پک من توسط روح استفاده میشود
-bool Hunt(sf::Sprite & Spacman, sf::Sprite & Sghosts)
+bool Hunt(sf::Sprite & Spacman, sf::Sprite & ghosts)
 {
-    if (Spacman.getGlobalBounds().intersects(Sghosts.getGlobalBounds())){
+    if (Spacman.getGlobalBounds().intersects(ghosts.getGlobalBounds())){
         return true;
     }
     else{
@@ -58,33 +58,83 @@ int main()
                 window.close();
             }
         }
-        // Check collison pacman and ghosts
-        if (Player.SetScore(GameMap.GetMap()))
+
+        Player.update(GameLevel, GameMap.GetMap());
+
+        if (!Player.Get_Dead())
         {
-            //cout << "############333";
+            Blinky.Update(ElapcedTime ,GameLevel, GameMap.GetMap(), Player.Get_PosX(), Player.Get_PosY());
+            Pinky.Update(ElapcedTime ,GameLevel, GameMap.GetMap(), Player.Get_PosX(), Player.Get_PosY());
+            Inky.Update(ElapcedTime ,GameLevel, GameMap.GetMap(), Player.Get_PosX(), Player.Get_PosY());
+            Clyde.Update(ElapcedTime ,GameLevel, GameMap.GetMap(), Player.Get_PosX(), Player.Get_PosY());
+        }
+       
+        // Check collison pacman and ghosts
+        if (Player.SetScore(GameMap.GetMap()))// if pacman eat Power pellet this return true
+        {
             Blinky.Set_FrightenedGhosts(true);
             Pinky.Set_FrightenedGhosts(true);
             Inky.Set_FrightenedGhosts(true);
             Clyde.Set_FrightenedGhosts(true);
         }
 
-        // if (Hunt(Player.GetSprite(), Blinky.GetSprit()) ||
-        //     Hunt(Player.GetSprite(), Pinky.GetSprit()) ||
-        //     Hunt(Player.GetSprite(), Inky.GetSprit()) ||
-        //     Hunt(Player.GetSprite(), Clyde.GetSprit())  )
-        // {
-        //     Player.Destroy();
-        // }
-        Player.update(ch, GameMap.GetMap());
+        // دستورات زیر برخورد پک من و ارواح را در دو حالت ترسیده و عادی بررسی میکند
+        if (Blinky.Get_FrightenedGhosts())
+        {
+            if (Hunt(Player.GetSprite(), Blinky.GetSprit()))
+            {
+
+            }
+        }
+        if (Pinky.Get_FrightenedGhosts())
+        {
+            if (Hunt(Player.GetSprite(), Blinky.GetSprit()))
+            {
+
+            }
+            
+        }
+        if (Inky.Get_FrightenedGhosts())
+        {
+            if (Hunt(Player.GetSprite(), Blinky.GetSprit()))
+            {
+
+            }
+            
+        }
+        if (Clyde.Get_FrightenedGhosts())
+        {
+            if (Hunt(Player.GetSprite(), Blinky.GetSprit()))
+            {
+
+            }
+            
+        }
+        if ( Hunt(Player.GetSprite(), Blinky.GetSprit()) ||
+                  Hunt(Player.GetSprite(), Pinky.GetSprit()) ||
+                  Hunt(Player.GetSprite(), Inky.GetSprit()) ||
+                  Hunt(Player.GetSprite(), Clyde.GetSprit()) )
+        {// pacman is die
+            Player.Set_Dead(true); 
+            Blinky.Reset(GameLevel);
+            ElapcedTime = sf::seconds(0);
+        }
+
+        
+
+        
         window.clear(sf::Color::Black);
         
         GameMap.DrowMap(window);
-        Player.Drow(window, ElapcedTime, ck);
-        Blinky.Drow(window, ElapcedTime , dt);
-        Pinky.Drow(window, ElapcedTime, dt);
-        Inky.Drow(window, ElapcedTime, dt);
-        Clyde.Drow(window, ElapcedTime, dt);
-        
+        Player.Drow(window, ElapcedTime, dt);
+        if (!Player.Get_Dead())
+        {
+            Blinky.Drow(window, ElapcedTime , dt);
+            Pinky.Drow(window, ElapcedTime, dt);
+            Inky.Drow(window, ElapcedTime, dt);
+            Clyde.Drow(window, ElapcedTime, dt);
+        }
+            
        
        // GameMap.DrowMap(window);
         window.display();
