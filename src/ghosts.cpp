@@ -1,13 +1,19 @@
 #include "Ghosts.hpp"
 #include <iostream>
 #include <stdexcept>
+#include "TypesOfCollisions.hpp"
+#include <ctime>
+#include <random>
+#include <cmath>
 using namespace std;
 
 Ghosts::Ghosts( int c) : 
 TotalTimeScared(sf::seconds(0)),
 color(c), 
 FrightenedGhosts(false),
-current_state(Wandering)
+current_state(Wandering),
+CurrentSpeed(2),
+house(true)
 {
     
     SetRestartPos();
@@ -30,22 +36,22 @@ void Ghosts::SetRestartPos()
     if (color == 0){
         Pos_X = 10 * Size ;
         Pos_Y = 7 * Size;
-        Direction = 1;
+        Direction = G_Right;
     }
     else if (color == 1){
         Pos_X = 9 * Size;
         Pos_Y = 9 * Size;
-        Direction = 1;
+        Direction = G_Right;
     }
     else if (color == 2){
         Pos_X = 10 * Size;
         Pos_Y = 9 * Size;
-        Direction = 2;
+        Direction = G_Up;
     }
     else if (color == 3){
         Pos_X = 11 * Size;
         Pos_Y = 9 * Size;
-        Direction = 3;
+        Direction = G_Left;
     }
     else{
         throw invalid_argument("Error: invalid start position of Ghosts in constructors ghosts");
@@ -103,6 +109,8 @@ GhostsState  Ghosts::SetTimer(int L, sf::Time & ETime) // L is GameLevel --- Eti
     }
 }// End function SetTimer
 
+// L is LevelGame
+// ET is ElapcedTime system
 void Ghosts::Change_CurrentState(int L, sf::Time & ET )
 {
     if (Get_FrightenedGhosts())
@@ -159,9 +167,10 @@ void Ghosts::Drow(sf::RenderWindow & window, sf::Time & ElapcedTime, sf::Time & 
     }
     else
     {
+        int x = static_cast<int>(Direction);
         AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * FramNum ) % FramNum ;
         GhostsSprite.setTextureRect
-        (sf::IntRect((AnimFram * Size) + (Direction * Size * 2), color * Size , Size, Size));
+        (sf::IntRect((AnimFram * Size) + (x * Size * 2), color * Size , Size, Size));
 
     }
 
@@ -253,11 +262,11 @@ void Ghosts::SetSpeed(int L)
            CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)50/100);
        }
        else if (Tunel){
-            CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)40/100);
+            CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)50/100);
 
        }
        else{
-           CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)75/100);
+           CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)100/100);
        }
     }
     else if (L >= 5 && L <= 20){
@@ -286,4 +295,350 @@ void Ghosts::SetSpeed(int L)
 
     }
 
+}
+
+void Ghosts::DirectionRandom(std::array<bool, 4> & walls)
+{
+    //walls[0] -> G_Right
+    //walls[1] -> G_Up
+    //walls[2] -> G_Left
+    //walls[3] -> G_Down
+    
+    int num = 0;
+    srand(time(0));
+    int random;
+    // Determine the number of free paths
+    for (int i = 0; i < 4; i++) 
+    {
+        if (!walls[i])
+        {
+            num++;
+        }
+    }
+    if (num == 4)
+    {
+        random = rand() % 3;
+        if (Direction == G_Right)//result should not be G_Left(2)
+        {
+            if (random == 0){
+                Direction = G_Right;
+            }
+            else if (random == 1){
+                Direction = G_Down;
+            }
+            else if (random == 2){
+                Direction = G_Up;
+            }
+        }
+        else if (Direction == G_Down)//result should not be G_Up(3)
+        {
+            if (random == 0){
+                Direction = G_Down;
+            }
+            else if (random == 1){
+                Direction = G_Right;
+            }
+            else if (random == 2){
+                Direction = G_Left;
+            }
+            
+        }
+        else if (Direction == G_Left)//result should not be G_Right(0)
+        {
+            if (random == 0){
+                Direction = G_Left;
+            }
+            else if (random == 1){
+                Direction = G_Up;
+            }
+            else if(random == 2){
+                Direction = G_Down;
+            }
+        }
+        else if (Direction == G_Up)//result should not be G_Down(1)
+        {
+            if (random == 0){
+                Direction = G_Up;
+            }
+            else if (random == 1){
+                Direction = G_Right;
+            }
+            else if (random == 2){
+                Direction = G_Left;
+            }  
+        }
+    }// End if num 4
+    else if (num == 3)
+    {
+        random = rand() % 2;
+        // دو شرط پیش رو بر اساس اشتراک بین مسیر های راست و چپ میباشد
+        // توضیحات دقیق تر در گزارش کار
+        if ( ((Direction == G_Right) && walls[G_Right]) || ((Direction == G_Left) && walls[G_Left]) )
+        {
+            if (random == 0){
+                Direction = G_Down;
+            }
+            else if (random == 1){
+                Direction = G_Up;
+            }
+        }
+        else if ( ((Direction == G_Down) && walls[G_Down]) || ((Direction == G_Up) && walls[G_Up]) )
+        {
+            if (random == 0){
+                Direction = G_Right;
+            }
+            else if (random == 1){
+                Direction = G_Left;
+            }
+        }
+        ///////////////////////////////////////////////////
+        // چهار شرط پیش رو بر اساس اشتراک بین مسیر های راست با پایین یا بالا همچنین چپ با پایین یا بالا است
+        // توضیحات دقیق تر در گزارش کار
+        else if ( ((Direction == G_Right) && walls[G_Up]) || ((Direction == G_Down) && walls[G_Left]) )
+        {
+            if (random == 0){
+                Direction = G_Right;
+            }
+            else if (random == 1){
+                Direction = G_Down;
+            }
+        }
+
+        else if ( ((Direction == G_Right) && walls[G_Down]) || ((Direction == G_Up) && walls[G_Left]))
+        {
+            if (random == 0){
+                Direction = G_Right;
+            }
+            else if (random == 1){
+                Direction = G_Up;
+            }
+        }
+
+        else if ( ((Direction == G_Left) && walls[G_Up]) || ((Direction == G_Down) && walls[G_Right]))
+        {
+            if (random == 0){
+                Direction = G_Left;
+            }
+            else if (random == 1){
+                Direction = G_Down;
+            }
+        }
+
+       else if ( ((Direction == G_Left) && walls[G_Down]) || ((Direction == G_Up) && walls[G_Right]))
+        {
+            if (random == 0){
+                Direction = G_Left;
+            }
+            else if (random == 1){
+                Direction = G_Up;
+            }
+        }
+    }// End if num 3
+    else if (num == 2)
+    {
+        if (((Direction == G_Right) || (Direction == G_Down) || (Direction == G_Up)) && !walls[G_Right])
+        {
+            Direction = G_Right;
+        }
+
+        else if (((Direction == G_Right) || (Direction == G_Up) || (Direction == G_Left)) && !walls[G_Up])
+        {
+            Direction = G_Up;
+        }
+
+        else if (((Direction == G_Right) || (Direction == G_Down) || (Direction == G_Left)) && !walls[G_Down])
+        {
+            Direction = G_Down;
+        }
+
+        else if (((Direction == G_Left) || (Direction == G_Down) || (Direction == G_Up)) && !walls[G_Left])
+        {
+            Direction = G_Left;
+        }
+    }
+    else if (num == 1) // this if is just for house of ghosts
+    {
+        if (Direction == G_Right){
+            Direction = G_Left;
+        }
+        else if (Direction == G_Down){
+            Direction = G_Up;
+        }
+        else if (Direction == G_Left){
+            Direction = G_Right;
+        }
+        else if (Direction == G_Up){
+            Direction = G_Down;
+        }
+                
+    }// End if num 1
+  
+}// End function Determine
+/*
+هدف تابع زیر ؟
+هدف تابع تنظیم درست جهت ارواح برای تعقیب و شکار پک من است
+x --- is position x of pacman
+y --- is position y pacman
+*/
+void Ghosts::DirectionChaser(std::array<bool, 4> & walls, float x, float y)
+{
+    if (house)
+    {
+        if (!walls[G_Up])
+        {
+            Direction = G_Up;
+        }
+        else if (walls[G_Right])
+        {
+            Direction = G_Left;
+        }
+        else if (walls[G_Left])
+        {
+            Direction = G_Right;
+        }
+    }
+    else if ((Direction == G_Right) || (Direction == G_Left))
+    {
+        if (Pos_Y > y)
+        {
+            if (!walls[G_Up])
+            {
+                Direction = G_Up;
+            }
+            else if (walls[Direction] && !walls[G_Down])
+            {
+                Direction = G_Down;
+            }
+           
+        }
+        else if (Pos_Y < y)
+        {
+            if (!walls[G_Down])
+            {
+                Direction = G_Down;
+            }
+            else if (walls[Direction] && !walls[G_Up])
+            {
+                Direction = G_Up;
+            }
+        }
+        else if (Pos_Y == y)
+        {
+            if ( ((Direction == G_Right) && ((x < Pos_X) || walls[G_Right])) || 
+                 ( (Direction == G_Left) && ((x > Pos_X) || walls[G_Left]) ) )
+            {
+                if (!walls[G_Up])
+                {
+                    Direction = G_Up;
+                }
+                else if (!walls[G_Down])
+                {
+                    Direction = G_Down;
+                }
+            }
+            
+        }
+
+    }
+    else if ((Direction == G_Up) || (Direction == G_Down))
+    {
+        if (Pos_X > x)
+        {
+            if (!walls[G_Left])
+            {
+                Direction = G_Left;
+            }
+            else if (walls[Direction] && !walls[G_Right])
+            {
+                Direction = G_Right;
+            }
+           
+        }
+        else if (Pos_X < x)
+        {
+            if (!walls[G_Right])
+            {
+                Direction = G_Right;
+            }
+            else if (walls[Direction] && !walls[G_Left])
+            {
+                Direction = G_Left;
+            }
+           
+        }
+        else if (Pos_X == x)
+        {
+            if ( ((Direction == G_Down)&&(Pos_Y > y || walls[G_Down])) || 
+                 ((Direction == G_Up)&&(y > Pos_Y || walls[G_Up])))
+            {
+                if (!walls[G_Right])
+                {
+                    Direction = G_Right;
+                }
+                else if (!walls[G_Left])
+                {
+                    Direction = G_Left;
+                }
+            }
+        }
+    }
+}// End function DirectionChaser
+void Ghosts::Update(sf::Time & ET ,const int level,array<array<Cell,Cell_Height>, Cell_Weight> & Gmap, float x, float y)
+{
+   
+    Change_CurrentState(level, ET);
+
+    if (Pos_Y == 7 * Cell_Size){
+        house = false;
+    }
+
+    array<bool, 4> walls = {true};
+    walls[0] = TypesOfCollisions(house ,false, false, Pos_X + CurrentSpeed , Pos_Y, Gmap); // G_Right
+    walls[1] = TypesOfCollisions(house ,false, false, Pos_X , Pos_Y + CurrentSpeed, Gmap);// G_Down
+    walls[2] = TypesOfCollisions(house ,false, false, Pos_X - CurrentSpeed, Pos_Y, Gmap);// G_Left
+    walls[3] = TypesOfCollisions(house ,false, false, Pos_X , Pos_Y - CurrentSpeed , Gmap);// G_Up
+    
+    if (current_state == Scared || current_state == Wandering)
+    {
+        DirectionRandom(walls);
+    }
+    else if (current_state == Chaser)
+    {
+        DirectionChaser(walls, x, y);
+    }
+    if (!walls[Direction])
+	{
+		switch (Direction)
+		{
+			case G_Right:
+			{	
+				Pos_X += CurrentSpeed;
+				break;
+			}
+			case G_Down:
+			{
+				Pos_Y += CurrentSpeed;
+				break;
+			}
+			case G_Left:
+			{
+				Pos_X -= CurrentSpeed;
+				break;
+			}
+			case G_Up:
+			{
+				Pos_Y -= CurrentSpeed;
+                break;
+			}
+		}
+	}
+    // تنظیم حرکت در تونل ها
+	if (-Cell_Size >= Pos_X) 
+	{
+		Pos_X = Cell_Size * Cell_Weight - CurrentSpeed;
+	}
+	else if (Cell_Size * Cell_Weight <= Pos_X)
+	{
+		Pos_X = CurrentSpeed - Cell_Size;
+	}
 }

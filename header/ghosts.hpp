@@ -7,16 +7,17 @@
 
 //#include "PacMan.hpp"
 
-
+enum IS_Direction {G_Right = 0, G_Down, G_Left, G_Up};
 enum GhostsState {Wandering , Chaser , Scared};
 class Ghosts
 {
     
 private:
+    bool house;
     float Pos_X; // موقعیت طولی
     float Pos_Y; // موقعیت عرضی
     const int color; // Blinky = 0 , Pinky, Inky, Clyde
-    int Direction; // Right = 1, Up = 2, Left = 3, Down = 4
+    IS_Direction Direction; 
     bool FrightenedGhosts; // if Ghosts be Scared
     float CurrentSpeed;
     sf::Time ScaredDuration; // مدت زمان ترسیده بر اساس مرحله
@@ -32,7 +33,7 @@ private:
     
     //////////////////////////////////////////////////////////
     GhostsState  SetTimer(int, sf::Time & ); // محاسبه زمان تغییر حالت ها
-    
+    void DirectionRandom(std::array<bool, 4> & ); // تعیین جهت اروح در تقاطع ها
 public:
     Ghosts(int );
     void set_xy(int, int);
@@ -51,7 +52,8 @@ public:
     bool Get_FrightenedGhosts();
     void SetSpeed(int ); // Set current speed based on argument GameLevel
 
-    void Update(const int ,std::array<std::array<Cell,Cell_Height>, Cell_Weight> & );
+    void DirectionChaser(std::array<bool, 4> &, float, float);
+    void Update(sf::Time & ,const int ,std::array<std::array<Cell,Cell_Height>, Cell_Weight> & , float, float);
 };
 
 #endif
