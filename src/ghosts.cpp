@@ -123,62 +123,6 @@ void Ghosts::Change_CurrentState(int L, sf::Time & ET )
     
 }// End function Change_CurrentState
 
-void Ghosts::Set_Animation()
-{
-    FramNum = 2; // number of frame in Image Pacman
-    TimeAnime = .5; // Animation durition
-    if (!GhostsTexture.loadFromFile("C:/Users/K2/Desktop/Pacman-game/Ghosts32.png")){
-        throw runtime_error("Ghosts Image can not load");
-    }
-    GhostsSprite.setTexture(GhostsTexture);
-
-}// End function Set_Sprite
-
-void Ghosts::Drow(sf::RenderWindow & window, sf::Time & ElapcedTime, sf::Time & dt)
-{
-    int Size = static_cast<int>(Cell_Size); // this is Cell Size --- size of all Ellement
-    float TimeAsSecond = ElapcedTime.asSeconds();
-    int AnimFram;
-    if (Get_FrightenedGhosts())
-    {
-        ElapcedTime_Scared += dt; // محاسبه مدت زمانی که روح در حالت ترسیده قرار اس بماند
-        TotalTimeScared += dt;
-        // شرط چشمک زدن روح ترسیده
-        //sf::seconds((TimeAnime/2 + (float)Winking))
-        if (ElapcedTime_Scared + sf::seconds(.5 * Winking) >= ScaredDuration )
-        {
-            AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * 4 ) % 4 ;
-            GhostsSprite.setTextureRect
-            (sf::IntRect((AnimFram * Size), 5 * Size , Size, Size));
-        }
-        else
-        {
-            AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * 2 ) % 2 ;
-            GhostsSprite.setTextureRect
-            (sf::IntRect((AnimFram * Size), 5 * Size , Size, Size));
-
-        }
-       
-        if (ElapcedTime_Scared >= ScaredDuration)
-        {
-            ElapcedTime_Scared = sf::seconds(0);
-            Set_FrightenedGhosts(false);
-        }
-    }
-    else
-    {
-        int x = static_cast<int>(Direction);
-        AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * FramNum ) % FramNum ;
-        GhostsSprite.setTextureRect
-        (sf::IntRect((AnimFram * Size) + (x * Size * 2), color * Size , Size, Size));
-
-    }
-
-    GhostsSprite.setPosition(Pos_X, Pos_Y);
-    window.draw(GhostsSprite);
-  
-}// End function Drow
-
 /*
 این تابع برخورد پک من با روح هارا بررسی میکند
 */
@@ -296,6 +240,124 @@ void Ghosts::SetSpeed(int L)
     }
 
 }
+
+void Ghosts::Update(sf::Time & ET ,const int level,array<array<Cell,Cell_Height>, Cell_Weight> & Gmap, float x, float y)
+{
+   
+    Change_CurrentState(level, ET);
+
+    if (Pos_Y == 7 * Cell_Size) // if true --> ghost exit from house
+    { 
+        house = false;
+    }
+
+    array<bool, 4> walls = {true};
+    walls[0] = TypesOfCollisions(house ,false, false, Pos_X + CurrentSpeed , Pos_Y, Gmap); // G_Right
+    walls[1] = TypesOfCollisions(house ,false, false, Pos_X , Pos_Y + CurrentSpeed, Gmap);// G_Down
+    walls[2] = TypesOfCollisions(house ,false, false, Pos_X - CurrentSpeed, Pos_Y, Gmap);// G_Left
+    walls[3] = TypesOfCollisions(house ,false, false, Pos_X , Pos_Y - CurrentSpeed , Gmap);// G_Up
+    
+    if (current_state == Scared || current_state == Wandering)
+    {
+        DirectionRandom(walls);
+    }
+    else if (current_state == Chaser)
+    {
+        DirectionChaser(walls, x, y);
+    }
+    if (!walls[Direction])
+	{
+		switch (Direction)
+		{
+			case G_Right:
+			{	
+				Pos_X += CurrentSpeed;
+				break;
+			}
+			case G_Down:
+			{
+				Pos_Y += CurrentSpeed;
+				break;
+			}
+			case G_Left:
+			{
+				Pos_X -= CurrentSpeed;
+				break;
+			}
+			case G_Up:
+			{
+				Pos_Y -= CurrentSpeed;
+                break;
+			}
+		}
+	}
+    // تنظیم حرکت در تونل ها
+	if (-Cell_Size >= Pos_X) 
+	{
+		Pos_X = Cell_Size * Cell_Weight - CurrentSpeed;
+	}
+	else if (Cell_Size * Cell_Weight <= Pos_X)
+	{
+		Pos_X = CurrentSpeed - Cell_Size;
+	}
+}
+
+void Ghosts::Set_Animation()
+{
+    FramNum = 2; // number of frame in Image Pacman
+    TimeAnime = .5; // Animation durition
+    if (!GhostsTexture.loadFromFile("C:/Users/K2/Desktop/Pacman-game/Ghosts32.png")){
+        throw runtime_error("Ghosts Image can not load");
+    }
+    GhostsSprite.setTexture(GhostsTexture);
+
+}// End function Set_Sprite
+
+void Ghosts::Drow(sf::RenderWindow & window, sf::Time & ElapcedTime, sf::Time & dt)
+{
+    int Size = static_cast<int>(Cell_Size); // this is Cell Size --- size of all Ellement
+    float TimeAsSecond = ElapcedTime.asSeconds();
+    int AnimFram;
+    if (Get_FrightenedGhosts())
+    {
+        ElapcedTime_Scared += dt; // محاسبه مدت زمانی که روح در حالت ترسیده قرار اس بماند
+        TotalTimeScared += dt;
+        // شرط چشمک زدن روح ترسیده
+        //sf::seconds((TimeAnime/2 + (float)Winking))
+        if (ElapcedTime_Scared + sf::seconds(.5 * Winking) >= ScaredDuration )
+        {
+            AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * 4 ) % 4 ;
+            GhostsSprite.setTextureRect
+            (sf::IntRect((AnimFram * Size), 5 * Size , Size, Size));
+        }
+        else
+        {
+            AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * 2 ) % 2 ;
+            GhostsSprite.setTextureRect
+            (sf::IntRect((AnimFram * Size), 5 * Size , Size, Size));
+
+        }
+       
+        if (ElapcedTime_Scared >= ScaredDuration)
+        {
+            ElapcedTime_Scared = sf::seconds(0);
+            Set_FrightenedGhosts(false);
+        }
+    }
+    else
+    {
+        int x = static_cast<int>(Direction);
+        AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * FramNum ) % FramNum ;
+        GhostsSprite.setTextureRect
+        (sf::IntRect((AnimFram * Size) + (x * Size * 2), color * Size , Size, Size));
+
+    }
+
+    GhostsSprite.setPosition(Pos_X, Pos_Y);
+    window.draw(GhostsSprite);
+  
+}// End function Drow
+
 
 void Ghosts::DirectionRandom(std::array<bool, 4> & walls)
 {
@@ -583,62 +645,3 @@ void Ghosts::DirectionChaser(std::array<bool, 4> & walls, float x, float y)
         }
     }
 }// End function DirectionChaser
-void Ghosts::Update(sf::Time & ET ,const int level,array<array<Cell,Cell_Height>, Cell_Weight> & Gmap, float x, float y)
-{
-   
-    Change_CurrentState(level, ET);
-
-    if (Pos_Y == 7 * Cell_Size){
-        house = false;
-    }
-
-    array<bool, 4> walls = {true};
-    walls[0] = TypesOfCollisions(house ,false, false, Pos_X + CurrentSpeed , Pos_Y, Gmap); // G_Right
-    walls[1] = TypesOfCollisions(house ,false, false, Pos_X , Pos_Y + CurrentSpeed, Gmap);// G_Down
-    walls[2] = TypesOfCollisions(house ,false, false, Pos_X - CurrentSpeed, Pos_Y, Gmap);// G_Left
-    walls[3] = TypesOfCollisions(house ,false, false, Pos_X , Pos_Y - CurrentSpeed , Gmap);// G_Up
-    
-    if (current_state == Scared || current_state == Wandering)
-    {
-        DirectionRandom(walls);
-    }
-    else if (current_state == Chaser)
-    {
-        DirectionChaser(walls, x, y);
-    }
-    if (!walls[Direction])
-	{
-		switch (Direction)
-		{
-			case G_Right:
-			{	
-				Pos_X += CurrentSpeed;
-				break;
-			}
-			case G_Down:
-			{
-				Pos_Y += CurrentSpeed;
-				break;
-			}
-			case G_Left:
-			{
-				Pos_X -= CurrentSpeed;
-				break;
-			}
-			case G_Up:
-			{
-				Pos_Y -= CurrentSpeed;
-                break;
-			}
-		}
-	}
-    // تنظیم حرکت در تونل ها
-	if (-Cell_Size >= Pos_X) 
-	{
-		Pos_X = Cell_Size * Cell_Weight - CurrentSpeed;
-	}
-	else if (Cell_Size * Cell_Weight <= Pos_X)
-	{
-		Pos_X = CurrentSpeed - Cell_Size;
-	}
-}
