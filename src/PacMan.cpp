@@ -10,17 +10,19 @@
 using namespace std;
 
  
-PacMan::PacMan(): Score(0),  
-EatPowerPellet(false), 
-Die(false)
+PacMan::PacMan():
+Life(4), 
+Score(0),  
+Dead(false),
+direction(Right),
+ElapcedTime_dead(sf::seconds(0))
 {
 	SetStartPos();
     Set_Animation(); // Set Informations animation of pacman
     set_HighScore();
-    Life = 4; 
-    CurrentSpeed = 2;
+	Set_Speed(1); 
     direction = Right;
-    Key = Right;
+
     //cout << "Pos_X : " << Pos_X << "    Pos_Y :" << Pos_Y << endl;
 }
 
@@ -39,17 +41,18 @@ float PacMan::Get_PosY()
 // when pacman is start game or die by ghosts this function reset the pacman position
 void PacMan::SetStartPos()
 {
-	Pos_X = Pos_X = static_cast<float>(PacManStartGame_X * Cell_Size);
+	Pos_X = static_cast<float>(PacManStartGame_X * Cell_Size);
 	Pos_Y = static_cast<float>(PacManStartGame_Y * Cell_Size);
 }
 
-void PacMan::Set_EatPowerPellet(bool E)
+
+void PacMan::Set_Dead(bool E)
 {
-	EatPowerPellet = E;
+	Dead = E;
 }
-bool PacMan::Get_EatPowerPellet()
+bool PacMan::Get_Dead()
 {
-	return EatPowerPellet;
+	return Dead;
 }
 
 // this function use in function hunt in main file
@@ -67,7 +70,6 @@ bool PacMan::SetScore(std::array<std::array<Cell,Cell_Height>, Cell_Weight> & Gm
 	}
 	else if (TypesOfCollisions(false ,false, true, Pos_X, Pos_Y, Gmap)){
 		Score += 50;
-		EatPowerPellet = true; // برای تغییر حالت ارواح به ترسیده
 		output = true;
 	}
 	return output;
@@ -112,32 +114,39 @@ void PacMan::update_HighScore()
 void PacMan::Set_Speed(int level)
 {
     float MaxSpeed = static_cast<float>(MAX_SPEED);
+	CurrentSpeed = MaxSpeed;
     
-    if (level >= 1 && level <= 4){
-        CurrentSpeed = static_cast<float>(MaxSpeed) * (80/100); 
-    }
-    else if (level >= 5 && level <= 20){
-        CurrentSpeed = static_cast<float>(MaxSpeed) * (90/100); 
-    }
-    else if (level >= 21 && level <= 32){
-        CurrentSpeed = static_cast<float>(MaxSpeed) ; 
-    }
-    else if (level >= 33){
-        CurrentSpeed = static_cast<float>(MaxSpeed) * (90/100); 
-    }
-    else{
-        throw out_of_range("Error: The value of Levels game out of range(Not be negatives number)");
-    }
+    // if (level >= 1 && level <= 4){
+    //     CurrentSpeed = MaxSpeed * (80/100); 
+    // }
+    // else if (level >= 5 && level <= 20){
+    //     CurrentSpeed = MaxSpeed * (90/100); 
+    // }
+    // else if (level >= 21 && level <= 32){
+    //     CurrentSpeed = MaxSpeed; 
+    // }
+    // else if (level >= 33){
+    //     CurrentSpeed = MaxSpeed * (90/100); 
+    // }
+    // else{
+    //     throw out_of_range("Error: The value of Levels game out of range(Not be negatives number)");
+    // }
 }//End function Set_Level
 
 void PacMan::Destroy()
 {
-	Die = true;
+	Score -= 20;
     Life--;
     if (Life == 0)
     {
         cout << "GAME OVER !" << endl;
     }
+
+	SetStartPos();
+	direction = Right;
+	ElapcedTime_dead = sf::seconds(0);
+	Dead = false;
+
 }// End function Destroy
 
 
@@ -151,16 +160,22 @@ void PacMan::Set_Animation()
     PacmanSprite.setTexture(PacmanTexture);
 
 }// End function Set_Sprite
-void PacMan::Drow(sf::RenderWindow & window ,  sf::Time & ElapcedTime , sf::Clock & ck)
+void PacMan::Drow(sf::RenderWindow & window ,  sf::Time & ElapcedTime , sf::Time & dt)
 {
     int Size = static_cast<int>(Cell_Size); // this is Cell Size and size of all Ellement
 	float TimeAsSecond = ElapcedTime.asSeconds();
 	int AnimFram;
-    if (Die){
+    if (Dead)
+	{
 		// framenum = 11
 		// timeanime = 1.2
+		ElapcedTime_dead += dt;
 		AnimFram = static_cast<int>((TimeAsSecond / 1.2) * 11) % 11 ;
 		PacmanSprite.setTextureRect(sf::IntRect(AnimFram * Size, 4 * Size , Size, Size));
+		if (ElapcedTime >= sf::seconds(1))// مدت زمان نمایش مرگ پک من
+		{
+			Destroy();
+		}
 
 	}
 	else{
@@ -169,10 +184,7 @@ void PacMan::Drow(sf::RenderWindow & window ,  sf::Time & ElapcedTime , sf::Cloc
 		PacmanSprite.setTextureRect(sf::IntRect(AnimFram * Size, direction * Size , Size, Size));
 	}
 		PacmanSprite.setPosition(Pos_X, Pos_Y);
-
 		window.draw(PacmanSprite);
-	   
-   // cout << Pos_X << "\t" << Pos_Y << endl;
 }
 
 void PacMan::update
@@ -187,33 +199,33 @@ void PacMan::update
 
 	if (1 == sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
-		if (0 == walls[0]) //You can't turn in this direction if there's a wall there.
+		if (!walls[Right]) //You can't turn in this direction if there's a wall there.
 		{
-			direction = 0;
+			direction = Right;
 		}
 	}
 
 	if (1 == sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		if (0 == walls[1])
+		if (!walls[Up])
 		{
-			direction = 1;
+			direction = Up;
 		}
 	}
 
 	if (1 == sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		if (0 == walls[2])
+		if (0 == walls[Left])
 		{
-			direction = 2;
+			direction = Left;
 		}
 	}
 
 	if (1 == sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		if (0 == walls[3])
+		if (0 == walls[Down])
 		{
-			direction = 3;
+			direction = Down;
 		}
 	}
 	
@@ -222,26 +234,26 @@ void PacMan::update
 	{
 		switch (direction)
 		{
-			case 0:
+			case Right:
 			{
 				
 				Pos_X += CurrentSpeed;
 
 				break;
 			}
-			case 1:
+			case Up:
 			{
 				Pos_Y -= CurrentSpeed;
 
 				break;
 			}
-			case 2:
+			case Left:
 			{
 				Pos_X -= CurrentSpeed;
 
 				break;
 			}
-			case 3:
+			case Down:
 			{
 				Pos_Y += CurrentSpeed;
 			}
@@ -264,8 +276,6 @@ void PacMan::update
 void PacMan::Reset()
 {
 	SetStartPos();
-	Die = false;
-	direction = 0; // is Right
-	EatPowerPellet = false;
-
+	Dead = false;
+	direction = Right; // is Right
 }

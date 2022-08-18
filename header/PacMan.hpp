@@ -5,7 +5,7 @@
 #include <array>
 typedef long long int llint;
 
-enum Directions {Right, Up,Left, Down, Stop};
+enum Directions {Right = 0, Up,Left, Down, Stop};
 
 class PacMan
 {
@@ -18,14 +18,13 @@ private:
     llint HighScore;
     float CurrentSpeed;
    // Directions direction;
-    Directions Key;
-    int direction;
+    Directions direction;
     sf::Sprite PacmanSprite;
     sf::Texture PacmanTexture;
     int FramNum;
     float TimeAnime;
-    bool Die; // this member set when pacman hunt by ghosts
-    bool EatPowerPellet; // this member set when eating Power pellet by pacman
+    bool Dead; // this member set when pacman hunt by ghosts
+    sf::Time ElapcedTime_dead;
 
 	///////////////////
     void set_HighScore();
@@ -42,8 +41,8 @@ public:
     float Get_PosY();
 	void Reset();
 
-    void Set_EatPowerPellet(bool );
-    bool Get_EatPowerPellet();
+    void Set_Dead(bool );
+    bool Get_Dead();
    
     
     int get_life() const;
@@ -55,7 +54,7 @@ public:
     void Destroy();
 
 	sf::Sprite & GetSprite(); // this function use in function hunt in main file
-    void Drow(sf::RenderWindow & , sf::Time & , sf::Clock &);
+    void Drow(sf::RenderWindow & , sf::Time & , sf::Time &);
 
 	// this get LevelGame and MapGame then Update the changes
 	void update(const int , std::array<std::array<Cell,Cell_Height>, Cell_Weight> & );
