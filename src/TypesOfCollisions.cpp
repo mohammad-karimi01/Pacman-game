@@ -1,4 +1,5 @@
 #include "TypesOfCollisions.hpp"
+#include "Information.hpp"
 #include <cmath>
 
 /*
@@ -9,7 +10,7 @@
 
 */
 bool TypesOfCollisions
-(bool EatPellets, bool EatPowerPellets, float P_x , float P_y,
+(bool house, bool EatPellets, bool EatPowerPellets, float P_x , float P_y,
  std::array<std::array<Cell,Cell_Height>, Cell_Weight> & GameMap )
 {
     
@@ -68,10 +69,10 @@ bool TypesOfCollisions
 				{
 					output = true;
 				}
-				// else if (0 == i_use_door && Cell::Door == i_map[x][y])
-				// {
-				// 	output = 1;
-				// }
+				else if (Cell::Door == GameMap[x][y] && !house)
+				{
+					output = true;
+				}
 			}
 			else if (EatPellets && !EatPowerPellets)
 			{
