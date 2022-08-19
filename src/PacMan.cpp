@@ -22,8 +22,6 @@ ElapcedTime_dead(sf::seconds(0))
     set_HighScore();
 	Set_Speed(1); 
     direction = Right;
-
-    //cout << "Pos_X : " << Pos_X << "    Pos_Y :" << Pos_Y << endl;
 }
 
 PacMan::~PacMan()
@@ -136,17 +134,15 @@ void PacMan::Set_Speed(int level)
 void PacMan::Destroy()
 {
 	Score -= 20;
-    Life--;
+    SetStartPos();
+	direction = Right;
+	ElapcedTime_dead = sf::seconds(0);
+	Dead = false;
+	Life--;
     if (Life == 0)
     {
         cout << "GAME OVER !" << endl;
     }
-
-	SetStartPos();
-	direction = Right;
-	ElapcedTime_dead = sf::seconds(0);
-	Dead = false;
-
 }// End function Destroy
 
 
@@ -170,11 +166,12 @@ void PacMan::Drow(sf::RenderWindow & window ,  sf::Time & ElapcedTime , sf::Time
 		// framenum = 11
 		// timeanime = 1.2
 		ElapcedTime_dead += dt;
-		AnimFram = static_cast<int>((TimeAsSecond / 1.2) * 11) % 11 ;
+		AnimFram = static_cast<int>((TimeAsSecond / 1) * 11) % 11 ;
 		PacmanSprite.setTextureRect(sf::IntRect(AnimFram * Size, 4 * Size , Size, Size));
-		if (ElapcedTime >= sf::seconds(1))// مدت زمان نمایش مرگ پک من
+		if (ElapcedTime_dead >= sf::seconds(1))// مدت زمان نمایش مرگ پک من
 		{
 			Destroy();
+			ElapcedTime = sf::seconds(0);
 		}
 
 	}
@@ -230,7 +227,7 @@ void PacMan::update
 	}
 	
     
-	if (0 == walls[direction])
+	if (!walls[direction] && !Dead)
 	{
 		switch (direction)
 		{

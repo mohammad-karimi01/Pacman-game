@@ -23,7 +23,7 @@ private:
     sf::Texture PacmanTexture;
     int FramNum;
     float TimeAnime;
-    bool Dead; // this member set when pacman hunt by ghosts
+    bool Dead = false; // this member set when pacman hunt by ghosts
     sf::Time ElapcedTime_dead;
 
 	///////////////////
