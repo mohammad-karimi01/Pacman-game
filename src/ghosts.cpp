@@ -12,7 +12,7 @@ TotalTimeScared(sf::seconds(0)),
 color(c), 
 FrightenedGhosts(false),
 current_state(Wandering),
-CurrentSpeed(2),
+CurrentSpeed(1),
 house(true)
 {
     
@@ -23,6 +23,10 @@ house(true)
 
 void Ghosts::Set_FrightenedGhosts(bool F)
 {
+    if (F && ElapcedTime_Scared > sf::seconds(0))
+    {
+        ElapcedTime_Scared = sf::seconds(0);
+    }
     FrightenedGhosts = F;
 }
 bool Ghosts::Get_FrightenedGhosts()
@@ -137,6 +141,7 @@ void Ghosts::Reset(int L) // L is LevelGame
     Set_ScaredDuration(L);
     TotalTimeScared = sf::seconds(0);
     FrightenedGhosts = false;
+    house = true;
 }
 
 void Ghosts::Set_ScaredDuration(int L)
@@ -194,6 +199,7 @@ void Ghosts::Set_ScaredDuration(int L)
 
 void Ghosts::SetSpeed(int L)
 {
+    float MaxSpeed = static_cast<float>(MAX_SPEED);
     bool Tunel = false;
     if ((Pos_Y == 9 * Cell_Size) && 
         ( (Pos_X < 4 * Cell_Size) || (Pos_X > 16 * Cell_Size) ) )
@@ -201,49 +207,51 @@ void Ghosts::SetSpeed(int L)
         Tunel = true;
     }
 
-    if (L >= 1 && L <= 4){
+    //if (L >= 1 && L <= 4){
        if (Get_FrightenedGhosts()){
-           CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)50/100);
+           CurrentSpeed = 1;
+           //MaxSpeed * ((float)50/100);
        }
        else if (Tunel){
-            CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)50/100);
-
+            CurrentSpeed = 1;
+            //MaxSpeed * ((float)50/100);
        }
        else{
-           CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)100/100);
+           CurrentSpeed = 2;
+           //MaxSpeed * ((float)100/100);
        }
-    }
-    else if (L >= 5 && L <= 20){
-         if (Get_FrightenedGhosts()){
-           CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)55/100);
-       }
-       else if (Tunel){
-            CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)45/100);
+    // }
+    // else if (L >= 5 && L <= 20){
+    //      if (Get_FrightenedGhosts()){
+    //        CurrentSpeed = MaxSpeed * ((float)55/100);
+    //    }
+    //    else if (Tunel){
+    //         CurrentSpeed = MaxSpeed * ((float)45/100);
 
-       }
-       else{
-           CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)85/100);
-       }
-    }
-    else if (L >= 21){
-        if (Get_FrightenedGhosts()){
-           CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)60/100);
-       }
-       else if (Tunel){
-            CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)50/100);
+    //    }
+    //    else{
+    //        CurrentSpeed = MaxSpeed * ((float)85/100);
+    //    }
+    // }
+    // else if (L >= 21){
+    //     if (Get_FrightenedGhosts()){
+    //        CurrentSpeed = MaxSpeed * ((float)60/100);
+    //    }
+    //    else if (Tunel){
+    //         CurrentSpeed = MaxSpeed * ((float)50/100);
 
-       }
-       else{
-           CurrentSpeed = static_cast<float>(MAX_SPEED) * ((float)95/100);
-       }
+    //    }
+    //    else{
+    //        CurrentSpeed = MaxSpeed * ((float)95/100);
+    //    }
 
-    }
+    // }
 
 }
 
 void Ghosts::Update(sf::Time & ET ,const int level,array<array<Cell,Cell_Height>, Cell_Weight> & Gmap, float x, float y)
 {
-   
+    SetSpeed(level);
     Change_CurrentState(level, ET);
 
     if (Pos_Y == 7 * Cell_Size) // if true --> ghost exit from house
@@ -341,7 +349,7 @@ void Ghosts::Drow(sf::RenderWindow & window, sf::Time & ElapcedTime, sf::Time & 
         if (ElapcedTime_Scared >= ScaredDuration)
         {
             ElapcedTime_Scared = sf::seconds(0);
-            Set_FrightenedGhosts(false);
+            FrightenedGhosts = false;
         }
     }
     else
@@ -367,7 +375,7 @@ void Ghosts::DirectionRandom(std::array<bool, 4> & walls)
     //walls[3] -> G_Down
     
     int num = 0;
-    srand(time(0));
+   // srand(time(0));
     int random;
     // Determine the number of free paths
     for (int i = 0; i < 4; i++) 
