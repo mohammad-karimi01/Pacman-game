@@ -10,7 +10,7 @@
 
 */
 bool TypesOfCollisions
-(bool house, bool EatPellets, bool EatPowerPellets, float P_x , float P_y,
+(bool FrightenedGhosts ,bool house, bool EatPellets, bool EatPowerPellets, float P_x , float P_y,
  std::array<std::array<Cell,Cell_Height>, Cell_Weight> & GameMap )
 {
     
@@ -69,7 +69,7 @@ bool TypesOfCollisions
 				{
 					output = true;
 				}
-				else if (Cell::Door == GameMap[x][y] && !house)
+				else if (Cell::Door == GameMap[x][y] && !house && !FrightenedGhosts)
 				{
 					output = true;
 				}
