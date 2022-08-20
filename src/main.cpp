@@ -50,6 +50,7 @@ int main()
     {
         sf::Time dt = ck.restart();
         ElapcedTime += dt;
+         bool flag = false;
 
         sf::Event event;
         while (window.pollEvent(event))
@@ -61,73 +62,69 @@ int main()
 
         Player.update(GameLevel, GameMap.GetMap());
 
-        if (!Player.Get_Dead())
-        {
-            Blinky.Update(ElapcedTime ,GameLevel, GameMap.GetMap(), Player.Get_PosX(), Player.Get_PosY());
-            Pinky.Update(ElapcedTime ,GameLevel, GameMap.GetMap(), Player.Get_PosX(), Player.Get_PosY());
-            Inky.Update(ElapcedTime ,GameLevel, GameMap.GetMap(), Player.Get_PosX(), Player.Get_PosY());
-            Clyde.Update(ElapcedTime ,GameLevel, GameMap.GetMap(), Player.Get_PosX(), Player.Get_PosY());
-        }
+        
         
         // Check collison pacman and ghosts
         if (Player.SetScore(GameMap.GetMap()))// if pacman eat Power pellet this return true
         {
-            Blinky.Set_FrightenedGhosts(true);
-            Pinky.Set_FrightenedGhosts(true);
-            Inky.Set_FrightenedGhosts(true);
-            Clyde.Set_FrightenedGhosts(true);
+            Blinky.Set_Scared();
+            Pinky.Set_Scared();
+            Inky.Set_Scared();
+            Clyde.Set_Scared();
         }
-        bool flag = false;
+       
         // دستورات زیر برخورد پک من و ارواح را در دو حالت ترسیده و عادی بررسی میکند
-        if (Blinky.Get_FrightenedGhosts())
+        if (!Blinky.Get_FrightenedGhosts() && Blinky.Get_Scared() )
         {
             if (Hunt(Player.GetSprite(), Blinky.GetSprit()))
             {
-
+                Blinky.Set_FrightenedGhosts();
+                cout << "Scared Blinky" << endl;
             }
+            
         }
-        else if ( Hunt(Player.GetSprite(), Blinky.GetSprit()))
+        else if ( !Blinky.Get_FrightenedGhosts() && Hunt(Player.GetSprite(), Blinky.GetSprit()))
         {
             flag = true;
         }
-        if (Pinky.Get_FrightenedGhosts())
+        if (!Pinky.Get_FrightenedGhosts() && Pinky.Get_Scared())
         {
             if (Hunt(Player.GetSprite(), Pinky.GetSprit()))
             {
-
+                Pinky.Set_FrightenedGhosts();
             }
             
         }
-        else if (Hunt(Player.GetSprite(), Pinky.GetSprit()))
+        else if (!Pinky.Get_FrightenedGhosts() && Hunt(Player.GetSprite(), Pinky.GetSprit()))
         {   
             flag = true;
         }
-        if (Inky.Get_FrightenedGhosts())
+        if (!Inky.Get_FrightenedGhosts() && Inky.Get_Scared())
         {
             if (Hunt(Player.GetSprite(), Inky.GetSprit()))
             {
-
+                Inky.Set_FrightenedGhosts();
             }
-            
         }
-        else if (Hunt(Player.GetSprite(), Inky.GetSprit()))
+        else if (!Inky.Get_FrightenedGhosts() && Hunt(Player.GetSprite(), Inky.GetSprit()))
         { 
             flag = true; 
         }
-        if (Clyde.Get_FrightenedGhosts())
+        if (!Clyde.Get_FrightenedGhosts() && Clyde.Get_Scared())
         {
-            if (Hunt(Player.GetSprite(), Blinky.GetSprit()))
+            if (Hunt(Player.GetSprite(), Clyde.GetSprit()))
             {
-
+                Clyde.Set_FrightenedGhosts();
             }
             
         }
-        else if (Hunt(Player.GetSprite(), Clyde.GetSprit()))
+        else if (!Clyde.Get_FrightenedGhosts() && Hunt(Player.GetSprite(), Clyde.GetSprit()))
         {// pacman is die
             flag = true;
         }
         if (flag)
         {
+            cout << "flag : " << flag << endl;
             Player.Set_Dead(true); 
             Blinky.Reset(GameLevel);
             Inky.Reset(GameLevel);
@@ -136,6 +133,14 @@ int main()
             flag = false;
         }
 
+
+        if (!Player.Get_Dead())
+        {
+            Blinky.Update(ElapcedTime ,GameLevel, GameMap.GetMap(), Player.Get_PosX(), Player.Get_PosY());
+            Pinky.Update(ElapcedTime ,GameLevel, GameMap.GetMap(), Player.Get_PosX(), Player.Get_PosY());
+            Inky.Update(ElapcedTime ,GameLevel, GameMap.GetMap(), Player.Get_PosX(), Player.Get_PosY());
+            Clyde.Update(ElapcedTime ,GameLevel, GameMap.GetMap(), Player.Get_PosX(), Player.Get_PosY());
+        }
         
 
         
