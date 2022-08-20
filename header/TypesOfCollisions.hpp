@@ -11,7 +11,7 @@
 
 */
 bool TypesOfCollisions
-(bool, bool, bool, float, float, std::array<std::array<Cell,Cell_Height>, Cell_Weight> &  );
+(bool, bool, bool, bool, float, float, std::array<std::array<Cell,Cell_Height>, Cell_Weight> &  );
 
 
 #endif
