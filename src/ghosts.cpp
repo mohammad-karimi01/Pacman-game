@@ -10,9 +10,8 @@ using namespace std;
 Ghosts::Ghosts( int c) : 
 TotalTimeScared(sf::seconds(0)),
 color(c), 
-FrightenedGhosts(false),
 current_state(Wandering),
-CurrentSpeed(1),
+CurrentSpeed(2),
 house(true)
 {
     
@@ -21,18 +20,40 @@ house(true)
     Set_ScaredDuration(1);
 }
 
-void Ghosts::Set_FrightenedGhosts(bool F)
+void Ghosts::Set_Scared()
 {
-    if (F && ElapcedTime_Scared > sf::seconds(0))
+    reverse();
+    current_state = Scared;
+    if (ElapcedTime_Scared > sf::seconds(0))
     {
-        ElapcedTime_Scared = sf::seconds(0);
+        ElapcedTime_Scared = sf::seconds(0);  
     }
-    FrightenedGhosts = F;
+}
+bool Ghosts::Get_Scared()
+{
+    if (current_state == Scared)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void Ghosts::Set_FrightenedGhosts()
+{
+    reverse();
+    current_state = FrightenedGhosts;
 }
 bool Ghosts::Get_FrightenedGhosts()
 {
-    return FrightenedGhosts;
+    if (current_state == FrightenedGhosts)
+        return true;
+    else
+        return false;
 }
+
 
 void Ghosts::SetRestartPos()
 {
@@ -63,6 +84,21 @@ void Ghosts::SetRestartPos()
 
 }
 
+void Ghosts::reverse()
+{
+    if (Direction == G_Right){
+        Direction = G_Left;
+    }
+    else if (Direction == G_Left){
+        Direction = G_Right;
+    }
+    else if (Direction == G_Up){
+        Direction = G_Down;
+    }
+    else if (Direction == G_Down){
+        Direction = G_Up;
+    }
+}
 
 GhostsState  Ghosts::SetTimer(int L, sf::Time & ETime) // L is GameLevel --- Etime is ElapcedTime of Game
 {
@@ -74,9 +110,15 @@ GhostsState  Ghosts::SetTimer(int L, sf::Time & ETime) // L is GameLevel --- Eti
             temp >= sf::seconds(54) && temp <= sf::seconds(59) ||
             temp >= sf::seconds(79) && temp <= sf::seconds(84) )
             {
+                if (current_state != Wandering){
+                    reverse();
+                }
                 return Wandering; // سرگردان
             }
         else {
+            if (current_state != Chaser){
+                    reverse();
+                }
             return Chaser; // تعقیب
 
         }
@@ -87,9 +129,15 @@ GhostsState  Ghosts::SetTimer(int L, sf::Time & ETime) // L is GameLevel --- Eti
             temp >= sf::seconds(54) && temp <= sf::seconds(59) ||
             temp >= sf::seconds(1092) && temp <= sf::seconds(1093.6) )
             {
+                if (current_state != Wandering){
+                    reverse();
+                }
                 return Wandering; // سرگردان
             }
         else {
+            if (current_state != Chaser){
+                    reverse();
+                }
             return Chaser ; // تعقیب
 
         }
@@ -100,9 +148,15 @@ GhostsState  Ghosts::SetTimer(int L, sf::Time & ETime) // L is GameLevel --- Eti
             temp >= sf::seconds(50) && temp <= sf::seconds(55) ||
             temp >= sf::seconds(1092) && temp <= sf::seconds(1093.6) )
             {
+                if (current_state != Wandering){
+                    reverse();
+                }
                 return Wandering; // سرگردان
             }
         else {
+            if (current_state != Chaser){
+                    reverse();
+                }
             return Chaser; // تعقیب
 
         }
@@ -117,9 +171,13 @@ GhostsState  Ghosts::SetTimer(int L, sf::Time & ETime) // L is GameLevel --- Eti
 // ET is ElapcedTime system
 void Ghosts::Change_CurrentState(int L, sf::Time & ET )
 {
-    if (Get_FrightenedGhosts())
+    if (Get_Scared())
     {
         current_state = Scared;
+    }
+    else if (Get_FrightenedGhosts())
+    {
+        current_state = FrightenedGhosts;
     }
     else{
         current_state = SetTimer(L, ET);
@@ -140,7 +198,7 @@ void Ghosts::Reset(int L) // L is LevelGame
     SetRestartPos();
     Set_ScaredDuration(L);
     TotalTimeScared = sf::seconds(0);
-    FrightenedGhosts = false;
+    current_state = Wandering ;
     house = true;
 }
 
@@ -199,7 +257,7 @@ void Ghosts::Set_ScaredDuration(int L)
 
 void Ghosts::SetSpeed(int L)
 {
-    float MaxSpeed = static_cast<float>(MAX_SPEED);
+    //float MaxSpeed = static_cast<float>(MAX_SPEED);
     bool Tunel = false;
     if ((Pos_Y == 9 * Cell_Size) && 
         ( (Pos_X < 4 * Cell_Size) || (Pos_X > 16 * Cell_Size) ) )
@@ -208,21 +266,26 @@ void Ghosts::SetSpeed(int L)
     }
 
     //if (L >= 1 && L <= 4){
-       if (Get_FrightenedGhosts()){
-           CurrentSpeed = 1;
-           //MaxSpeed * ((float)50/100);
-       }
-       else if (Tunel){
-            CurrentSpeed = 1;
-            //MaxSpeed * ((float)50/100);
-       }
-       else{
-           CurrentSpeed = 2;
-           //MaxSpeed * ((float)100/100);
-       }
+    if (Get_FrightenedGhosts())
+    {
+        CurrentSpeed = 6;
+    }
+    else if (Get_Scared() || Tunel){
+        CurrentSpeed = 2;
+        //MaxSpeed * ((float)50/100);
+    }
+    else{
+        CurrentSpeed = 4;
+        //MaxSpeed * ((float)100/100);
+    }
+    ///////////////////////
+    // بررسی این مسئله که ایا موقعیت فعلی با در نظر گرفتن سرعت جدید
+    // منجر به تداخل در پیکسل های اشیا میشود یا نه
+    // اگر بشود منجر به باگ شده و رفتار اشیا نامشخص است
+   
     // }
     // else if (L >= 5 && L <= 20){
-    //      if (Get_FrightenedGhosts()){
+    //      if (Get_Scared()){
     //        CurrentSpeed = MaxSpeed * ((float)55/100);
     //    }
     //    else if (Tunel){
@@ -234,7 +297,7 @@ void Ghosts::SetSpeed(int L)
     //    }
     // }
     // else if (L >= 21){
-    //     if (Get_FrightenedGhosts()){
+    //     if (Get_Scared()){
     //        CurrentSpeed = MaxSpeed * ((float)60/100);
     //    }
     //    else if (Tunel){
@@ -251,7 +314,14 @@ void Ghosts::SetSpeed(int L)
 
 void Ghosts::Update(sf::Time & ET ,const int level,array<array<Cell,Cell_Height>, Cell_Weight> & Gmap, float x, float y)
 {
-    SetSpeed(level);
+    array<bool, 4> walls = {true};
+    walls[0] = TypesOfCollisions(Get_FrightenedGhosts() ,house ,false, false, Pos_X + CurrentSpeed , Pos_Y, Gmap); // G_Right
+    walls[1] = TypesOfCollisions(Get_FrightenedGhosts() ,house ,false, false, Pos_X , Pos_Y + CurrentSpeed, Gmap);// G_Down
+    walls[2] = TypesOfCollisions(Get_FrightenedGhosts() ,house ,false, false, Pos_X - CurrentSpeed, Pos_Y, Gmap);// G_Left
+    walls[3] = TypesOfCollisions(Get_FrightenedGhosts() ,house ,false, false, Pos_X , Pos_Y - CurrentSpeed , Gmap);// G_Up
+  
+    
+    //SetSpeed(level);
     Change_CurrentState(level, ET);
 
     if (Pos_Y == 7 * Cell_Size) // if true --> ghost exit from house
@@ -259,13 +329,19 @@ void Ghosts::Update(sf::Time & ET ,const int level,array<array<Cell,Cell_Height>
         house = false;
     }
 
-    array<bool, 4> walls = {true};
-    walls[0] = TypesOfCollisions(house ,false, false, Pos_X + CurrentSpeed , Pos_Y, Gmap); // G_Right
-    walls[1] = TypesOfCollisions(house ,false, false, Pos_X , Pos_Y + CurrentSpeed, Gmap);// G_Down
-    walls[2] = TypesOfCollisions(house ,false, false, Pos_X - CurrentSpeed, Pos_Y, Gmap);// G_Left
-    walls[3] = TypesOfCollisions(house ,false, false, Pos_X , Pos_Y - CurrentSpeed , Gmap);// G_Up
-    
-    if (current_state == Scared || current_state == Wandering)
+    if (Get_FrightenedGhosts())
+    {
+        if (Pos_X == 10 * Cell_Size && Pos_Y == 9 * Cell_Size)
+        {
+            current_state = None;
+            house = true;
+        }
+        else 
+        {
+            DirectionChaser(walls, 10 * Cell_Size, 9 * Cell_Size);
+        }
+    }
+    else if (current_state == Scared || current_state == Wandering)
     {
         DirectionRandom(walls);
     }
@@ -273,6 +349,7 @@ void Ghosts::Update(sf::Time & ET ,const int level,array<array<Cell,Cell_Height>
     {
         DirectionChaser(walls, x, y);
     }
+    
     if (!walls[Direction])
 	{
 		switch (Direction)
@@ -328,6 +405,12 @@ void Ghosts::Drow(sf::RenderWindow & window, sf::Time & ElapcedTime, sf::Time & 
     int AnimFram;
     if (Get_FrightenedGhosts())
     {
+       // AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * 4 ) % 4 ;
+        GhostsSprite.setTextureRect
+        (sf::IntRect( Direction * Size * 2, 4 * Size , Size, Size));
+    }
+    else if (Get_Scared())
+    {
         ElapcedTime_Scared += dt; // محاسبه مدت زمانی که روح در حالت ترسیده قرار اس بماند
         TotalTimeScared += dt;
         // شرط چشمک زدن روح ترسیده
@@ -349,15 +432,14 @@ void Ghosts::Drow(sf::RenderWindow & window, sf::Time & ElapcedTime, sf::Time & 
         if (ElapcedTime_Scared >= ScaredDuration)
         {
             ElapcedTime_Scared = sf::seconds(0);
-            FrightenedGhosts = false;
+            current_state = None;
         }
     }
-    else
+    else 
     {
-        int x = static_cast<int>(Direction);
         AnimFram = static_cast<int>((TimeAsSecond / TimeAnime) * FramNum ) % FramNum ;
         GhostsSprite.setTextureRect
-        (sf::IntRect((AnimFram * Size) + (x * Size * 2), color * Size , Size, Size));
+        (sf::IntRect((AnimFram * Size) + (Direction * Size * 2), color * Size , Size, Size));
 
     }
 
@@ -552,7 +634,7 @@ y --- is position y pacman
 */
 void Ghosts::DirectionChaser(std::array<bool, 4> & walls, float x, float y)
 {
-    if (house)
+    if (house && !Get_FrightenedGhosts())
     {
         if (!walls[G_Up])
         {
