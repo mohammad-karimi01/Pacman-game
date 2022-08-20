@@ -15,7 +15,8 @@ Life(4),
 Score(0),  
 Dead(false),
 direction(Right),
-ElapcedTime_dead(sf::seconds(0))
+ElapcedTime_dead(sf::seconds(0)),
+CurrentSpeed(2)
 {
 	SetStartPos();
     Set_Animation(); // Set Informations animation of pacman
@@ -62,11 +63,11 @@ sf::Sprite &PacMan::GetSprite()
 bool PacMan::SetScore(std::array<std::array<Cell,Cell_Height>, Cell_Weight> & Gmap)
 {
 	bool output = false;
-	if (TypesOfCollisions(false ,true, false, Pos_X, Pos_Y, Gmap)){
+	if (TypesOfCollisions(false ,false ,true, false, Pos_X, Pos_Y, Gmap)){
 		Score += 10; 
 		//output = false;
 	}
-	else if (TypesOfCollisions(false ,false, true, Pos_X, Pos_Y, Gmap)){
+	else if (TypesOfCollisions(false ,false ,false, true, Pos_X, Pos_Y, Gmap)){
 		Score += 50;
 		output = true;
 	}
@@ -166,7 +167,7 @@ void PacMan::Drow(sf::RenderWindow & window ,  sf::Time & ElapcedTime , sf::Time
 		// framenum = 11
 		// timeanime = 1.2
 		ElapcedTime_dead += dt;
-		AnimFram = static_cast<int>((TimeAsSecond / 1) * 11) % 11 ;
+		AnimFram = static_cast<int>((ElapcedTime_dead.asSeconds() / 1) * 11) % 11 ;
 		PacmanSprite.setTextureRect(sf::IntRect(AnimFram * Size, 4 * Size , Size, Size));
 		if (ElapcedTime_dead >= sf::seconds(1))// مدت زمان نمایش مرگ پک من
 		{
@@ -189,10 +190,10 @@ void PacMan::update
 {
 	
 	std::array<bool, 4> walls{};
-	walls[0] = TypesOfCollisions(false ,0, 0, CurrentSpeed + Pos_X, Pos_Y, i_map);
-	walls[1] = TypesOfCollisions(false ,0, 0, Pos_X, Pos_Y - CurrentSpeed, i_map);
-	walls[2] = TypesOfCollisions(false ,0, 0, Pos_X - CurrentSpeed, Pos_Y, i_map);
-	walls[3] = TypesOfCollisions(false ,0, 0, Pos_X, CurrentSpeed + Pos_Y, i_map);
+	walls[0] = TypesOfCollisions(false ,false ,false, false, CurrentSpeed + Pos_X, Pos_Y, i_map);
+	walls[1] = TypesOfCollisions(false ,false ,false, false, Pos_X, Pos_Y - CurrentSpeed, i_map);
+	walls[2] = TypesOfCollisions(false ,false ,false, false, Pos_X - CurrentSpeed, Pos_Y, i_map);
+	walls[3] = TypesOfCollisions(false ,false ,false, false, Pos_X, CurrentSpeed + Pos_Y, i_map);
 
 	if (1 == sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
