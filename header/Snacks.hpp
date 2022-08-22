@@ -7,11 +7,6 @@ enum SnackType
 {apple, strawberry, cherry, peach, grape, banana};
 //                                           totfarangi   albalu   holoo   angor
 
-// SnackType DetermineSnack(int );
-// long long int GetScores_Snacks(const SnackType &, int ); // int is number of Ghosts(1-4)
-// void DrowFruit(int ); // argument is level game
-
-
 /*
 این تابع اساسا برای محاسبه امتیاز پک من استفاده میشود
 */
