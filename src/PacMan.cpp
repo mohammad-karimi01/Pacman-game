@@ -58,7 +58,7 @@ sf::Sprite &PacMan::GetSprite()
 	return PacmanSprite;
 }
 // this function update score when pacman eat pellet or power pellet
-bool PacMan::SetScore(std::array<std::array<Cell,Cell_Height>, Cell_Weight> & Gmap)
+bool PacMan::SetScorePellet(std::array<std::array<Cell,Cell_Height>, Cell_Weight> & Gmap)
 {
 	bool output = false;
 	if (TypesOfCollisions(false ,false ,true, false, Pos_X, Pos_Y, Gmap)){
@@ -106,30 +106,10 @@ void PacMan::update_HighScore()
     }
 
 }// End function*
-/*
-// this function get game level and update pacman speed
-void PacMan::Set_Speed(int level)
+void PacMan::SetScoreGhosts(int S)
 {
-    float MaxSpeed = static_cast<float>(MAX_SPEED);
-	CurrentSpeed = MaxSpeed;
-    
-    if (level >= 1 && level <= 4){
-        CurrentSpeed = MaxSpeed * (80/100); 
-    }
-    else if (level >= 5 && level <= 20){
-        CurrentSpeed = MaxSpeed * (90/100); 
-    }
-    else if (level >= 21 && level <= 32){
-        CurrentSpeed = MaxSpeed; 
-    }
-    else if (level >= 33){
-        CurrentSpeed = MaxSpeed * (90/100); 
-    }
-    else{
-        throw out_of_range("Error: The value of Levels game out of range(Not be negatives number)");
-    }
-}////دEnd function Set_Level
-*/
+	Score += S;
+}
 void PacMan::Destroy()
 {
 	Score -= 20;
@@ -153,7 +133,7 @@ void func(sf::Font & font, sf::Text & text, float x, float y)
 }
 void PacMan::SetFont()
 {
-	float x = float(Cell_Size) * float(Cell_Height);
+	float x = float(Cell_Size) * float(Cell_Weight);
 	if (!font.loadFromFile("C:/Users/K2/Desktop/Pacman-game/times.ttf"))
 	{
 		throw runtime_error("Error: the font files can not be open");
@@ -164,10 +144,12 @@ void PacMan::SetFont()
 	func(font, HighScoreText, x + float(Cell_Size) * 8, CharSize + 5 );
 	text1.setString("SCORE");
 	text2.setString("HIGH SCORE");
+	
 }//End function SetFont
 
 void PacMan::Set_Animation()
 {
+	
     FramNum = 6; // number of frame in Image Pacman
     TimeAnime = .5; // Animation durition
     if (!PacmanTexture.loadFromFile("C:/Users/K2/Desktop/Pacman-game/Pacman32.png")){
@@ -175,6 +157,9 @@ void PacMan::Set_Animation()
     }
     PacmanSprite.setTexture(PacmanTexture);
 
+	// this textur is for pacmans life
+	LifeTextur.loadFromFile("C:/Users/K2/Desktop/Pacman-game/PacmanLife32.png");
+	
 }// End function Set_Sprite
 void PacMan::Drow(sf::RenderWindow & window ,  sf::Time & ElapcedTime , sf::Time & dt)
 {
@@ -311,7 +296,19 @@ void PacMan::ShowScores(sf::RenderWindow & win)
 	win.draw(HighScoreText);
 }// End function ShowScore
 
-void PacMan::ShowLife(sf::RenderWindow &)
+void PacMan::ShowLife(sf::RenderWindow & win)
 {
+	sf::Sprite LifeSprit[Life];
+	float x = float(Cell_Size) * float(Cell_Weight) - Cell_Size;
+	float y = float(Cell_Size) * float(Cell_Height) - Cell_Size;
+
+	// this sprit is for number of life pacman
+	for (size_t i = 0; i < Life; i++)
+	{
+		LifeSprit[i].setPosition(x + float(Cell_Size) * i  , y);
+		LifeSprit[i].setTexture(LifeTextur);
+		win.draw(LifeSprit[i]);
+	}
+	
 	
 }

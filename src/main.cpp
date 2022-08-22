@@ -29,7 +29,7 @@ bool Hunt(sf::Sprite & Spacman, sf::Sprite & ghosts)
 
 int main()
 {
-    unsigned char ch = 1;
+    bool one = false;
     float x = static_cast<float>(MAX_SPEED);
     //cout << x << endl;
     Map GameMap;
@@ -45,12 +45,12 @@ int main()
     
     sf::Time ElapcedTime;
     sf::Clock ck;
-
+    
     while (window.isOpen())
     {
         sf::Time dt = ck.restart();
         ElapcedTime += dt;
-         bool flag = false;
+        bool flag = false;
 
         sf::Event event;
         while (window.pollEvent(event))
@@ -65,7 +65,7 @@ int main()
         
         
         // Check collison pacman and ghosts
-        if (Player.SetScore(GameMap.GetMap()))// if pacman eat Power pellet this return true
+        if (Player.SetScorePellet(GameMap.GetMap()))// if pacman eat Power pellet this return true
         {
             Blinky.Set_Scared();
             Pinky.Set_Scared();
@@ -79,9 +79,8 @@ int main()
             if (Hunt(Player.GetSprite(), Blinky.GetSprit()))
             {
                 Blinky.Set_FrightenedGhosts();
-                cout << "Scared Blinky" << endl;
+                Player.SetScoreGhosts(Blinky.GetScore());
             }
-            
         }
         else if ( !Blinky.Get_FrightenedGhosts() && Hunt(Player.GetSprite(), Blinky.GetSprit()))
         {
@@ -92,6 +91,7 @@ int main()
             if (Hunt(Player.GetSprite(), Pinky.GetSprit()))
             {
                 Pinky.Set_FrightenedGhosts();
+                Player.SetScoreGhosts(Pinky.GetScore());
             }
             
         }
@@ -104,6 +104,7 @@ int main()
             if (Hunt(Player.GetSprite(), Inky.GetSprit()))
             {
                 Inky.Set_FrightenedGhosts();
+                Player.SetScoreGhosts(Inky.GetScore());
             }
         }
         else if (!Inky.Get_FrightenedGhosts() && Hunt(Player.GetSprite(), Inky.GetSprit()))
@@ -115,6 +116,7 @@ int main()
             if (Hunt(Player.GetSprite(), Clyde.GetSprit()))
             {
                 Clyde.Set_FrightenedGhosts();
+                Player.SetScoreGhosts(Clyde.GetScore());
             }
             
         }
@@ -122,9 +124,8 @@ int main()
         {// pacman is die
             flag = true;
         }
-        if (flag)
+        if (flag && one)
         {
-            cout << "flag : " << flag << endl;
             Player.Set_Dead(); 
             Blinky.Reset(GameLevel);
             Inky.Reset(GameLevel);
@@ -158,6 +159,8 @@ int main()
         
         GameMap.DrowMap(window);
         Player.Drow(window, ElapcedTime, dt);
+        Player.ShowScores(window);
+        Player.ShowLife(window);
         if (!Player.Get_Dead())
         {
             Blinky.Drow(window, ElapcedTime , dt);
@@ -165,10 +168,10 @@ int main()
             Inky.Drow(window, ElapcedTime, dt);
             Clyde.Drow(window, ElapcedTime, dt);
         }
-            
-       
-       // GameMap.DrowMap(window);
+
+
         window.display();
+        one = true;
     }
     return 0;
 }

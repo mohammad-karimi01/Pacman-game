@@ -17,7 +17,7 @@ class PacMan
         llint HighScore;
         float CurrentSpeed;
         Directions direction;
-        sf::Sprite LifeSprit;
+        sf::Texture LifeTextur;
         sf::Sprite PacmanSprite;
         sf::Texture PacmanTexture;
         sf::Font font;
@@ -48,7 +48,8 @@ class PacMan
         sf::Sprite & GetSprite(); // this function use in function hunt in main file
         void update_HighScore();
         void Reset(); // call when pacman is win
-        bool SetScore(std::array<std::array<Cell,Cell_Height>, Cell_Weight> & );
+        bool SetScorePellet(std::array<std::array<Cell,Cell_Height>, Cell_Weight> & );
+        void SetScoreGhosts(int );
         void Destroy();// cal when pacman is die
         void Drow(sf::RenderWindow & , sf::Time & , sf::Time &);
         // this get LevelGame and MapGame then Update the changes
