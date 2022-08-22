@@ -6,7 +6,7 @@
 #define Cell_Weight 21 // عرض نقشه
 #define Cell_Size 32 // اندازه هر سلول با واحد پیکسل
 #define MAX_SPEED 2 // بیشینه سرعت پک من و ارواح
-
+#define CharSize 25 // سایز فونت امتیازات
 #define PacManStartGame_X 10
 #define PacManStartGame_Y 15
 
