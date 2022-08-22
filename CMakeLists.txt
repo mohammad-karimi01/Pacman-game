@@ -4,20 +4,16 @@ project(test)
 
 set(cmake_cxx_standard 11)
 
-include_directories(header/)
+include_directories(header/ C:/sfml/SFML-2.5.1/include)
 
 set(sources
 	src/main.cpp
-	src/Wandering.cpp
-	src/Hunter.cpp
-	src/Scared.cpp
-	src/snacks.cpp
-	src/power_pellets.cpp
-	src/pellets.cpp
+	src/Map.cpp
 	src/PacMan.cpp
-	src/ghosts.cpp
-	src/ghosts_state.cpp
-	src/fruits.cpp
+	src/Ghosts.cpp
+	src/TypesOfCollisions.cpp
 )
 
 add_executable(app ${sources})
+
+target_link_libraries(app sfml-window sfml-system sfml-graphics)
