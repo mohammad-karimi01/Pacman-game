@@ -21,6 +21,7 @@ CurrentSpeed(2)
 	SetStartPos();
     Set_Animation(); 
     set_HighScore();
+	SetFont();
 }
 
 PacMan::~PacMan()
@@ -143,6 +144,27 @@ void PacMan::Destroy()
     }
 }// End function Destroy
 
+void func(sf::Font & font, sf::Text & text, float x, float y)
+{
+	text.setFont(font);
+	text.setPosition(sf::Vector2f(x, y));
+	text.setStyle(sf::Text::Bold);
+	text.setCharacterSize(CharSize);
+}
+void PacMan::SetFont()
+{
+	float x = float(Cell_Size) * float(Cell_Height);
+	if (!font.loadFromFile("C:/Users/K2/Desktop/Pacman-game/times.ttf"))
+	{
+		throw runtime_error("Error: the font files can not be open");
+	}
+	func(font, text1, x + float(Cell_Size) * 4, 0 );
+	func(font, text2, x + float(Cell_Size) * 8 ,0);
+	func(font, ScoreText, x + float(Cell_Size) * 4, CharSize + 5 );
+	func(font, HighScoreText, x + float(Cell_Size) * 8, CharSize + 5 );
+	text1.setString("SCORE");
+	text2.setString("HIGH SCORE");
+}//End function SetFont
 
 void PacMan::Set_Animation()
 {
@@ -273,4 +295,23 @@ void PacMan::Reset()
 	Dead = false;
 	direction = Right; // is Right
 	ElapcedTime_dead = sf::seconds(0);
+}
+
+void PacMan::ShowScores(sf::RenderWindow & win)
+{
+	string S(to_string(Score));
+	string HS(to_string(HighScore));
+
+	ScoreText.setString(S);
+	HighScoreText.setString(HS);
+
+	win.draw(text1);
+	win.draw(text2);
+	win.draw(ScoreText);
+	win.draw(HighScoreText);
+}// End function ShowScore
+
+void PacMan::ShowLife(sf::RenderWindow &)
+{
+	
 }

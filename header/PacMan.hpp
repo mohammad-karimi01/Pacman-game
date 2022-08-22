@@ -17,16 +17,24 @@ class PacMan
         llint HighScore;
         float CurrentSpeed;
         Directions direction;
+        sf::Sprite LifeSprit;
         sf::Sprite PacmanSprite;
         sf::Texture PacmanTexture;
+        sf::Font font;
+        sf::Text ScoreText;
+        sf::Text HighScoreText;
+        sf::Text text1;
+        sf::Text text2;
         int FramNum; // number of fram in imaages pacman
         float TimeAnime;
         bool Dead ; // this member set when pacman hunt by ghosts
         sf::Time ElapcedTime_dead;
+        
         ///////////////////
         void set_HighScore();
         void Set_Animation(); // Information of animations Pacman
         void SetStartPos(); // when pacman is start game or die by ghosts this function reset the pacman position
+        void SetFont();
     public:
         PacMan();
         ~PacMan();
@@ -45,6 +53,8 @@ class PacMan
         void Drow(sf::RenderWindow & , sf::Time & , sf::Time &);
         // this get LevelGame and MapGame then Update the changes
         void update(const int , std::array<std::array<Cell,Cell_Height>, Cell_Weight> & );
+        void ShowScores(sf::RenderWindow & ); // show score and highscore in rendering
+        void ShowLife(sf::RenderWindow &);
 };
 
 #endif
