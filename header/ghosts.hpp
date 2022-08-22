@@ -29,7 +29,7 @@ private:
 	int FramNum;
 	float TimeAnime;
     GhostsState  current_state; // حالت جاری روح که شامل ترسیده یا سرگردان یا تعقیب است
-    
+    static int count;
     //////////////////////////////////////////////////////////
     GhostsState  SetTimer(int, sf::Time & ); // محاسبه زمان تغییر حالت ها
     void DirectionRandom(std::array<bool, 4> & ); // تعیین جهت اروح در تقاطع ها
@@ -49,7 +49,7 @@ public:
     void SetRestartPos();
     void Set_Scared();
     bool Get_Scared();
-   // void SetSpeed(int ); // Set current speed based on argument GameLevel
+    int GetScore();
     void reverse();
     void DirectionChaser(std::array<bool, 4> &, float, float);
     void Update(sf::Time & ,const int ,std::array<std::array<Cell,Cell_Height>, Cell_Weight> & , float, float);

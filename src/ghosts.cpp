@@ -7,6 +7,8 @@
 #include <cmath>
 using namespace std;
 
+int Ghosts::count = 0; // شمارش ارواح شکار شده در هر بار حالت ترسیده
+
 Ghosts::Ghosts( int c) : 
 TotalTimeScared(sf::seconds(0)),
 color(c), 
@@ -22,6 +24,7 @@ house(true)
 
 void Ghosts::Set_Scared()
 {
+    count = 0;
     reverse();
     current_state = Scared;
     if (ElapcedTime_Scared > sf::seconds(0))
@@ -43,6 +46,7 @@ bool Ghosts::Get_Scared()
 
 void Ghosts::Set_FrightenedGhosts()
 {
+    count++;
     reverse();
     current_state = FrightenedGhosts;
 }
@@ -252,46 +256,26 @@ void Ghosts::Set_ScaredDuration(int L)
 
 }
 
-/*
-void Ghosts::SetSpeed(int L)
+int Ghosts::GetScore()
 {
-    float MaxSpeed = static_cast<float>(MAX_SPEED);
-    bool Tunel = false;
-    if ((Pos_Y == 9 * Cell_Size) && 
-        ( (Pos_X < 4 * Cell_Size) || (Pos_X > 16 * Cell_Size) ) )
-    {
-        Tunel = true;
+    if (count == 1){
+        return 200;
+    }
+    else if (count == 2){
+        return 400;
+    }
+    else if (count == 3){
+        return 800;
+    }
+    else if (count == 4){
+        return 1600;
+    }
+    else{
+        return 0;
     }
 
-    }
-    else if (L >= 5 && L <= 20){
-         if (Get_Scared()){
-           CurrentSpeed = MaxSpeed * ((float)55/100);
-       }
-       else if (Tunel){
-            CurrentSpeed = MaxSpeed * ((float)45/100);
+}// End function GetScore
 
-       }
-       else{
-           CurrentSpeed = MaxSpeed * ((float)85/100);
-       }
-    }
-    else if (L >= 21){
-        if (Get_Scared()){
-           CurrentSpeed = MaxSpeed * ((float)60/100);
-       }
-       else if (Tunel){
-            CurrentSpeed = MaxSpeed * ((float)50/100);
-
-       }
-       else{
-           CurrentSpeed = MaxSpeed * ((float)95/100);
-       }
-
-    }
-
-}
-*/
 
 void Ghosts::Update(sf::Time & ET ,const int level,array<array<Cell,Cell_Height>, Cell_Weight> & Gmap, float x, float y)
 {
