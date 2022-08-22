@@ -19,21 +19,18 @@ ElapcedTime_dead(sf::seconds(0)),
 CurrentSpeed(2)
 {
 	SetStartPos();
-    Set_Animation(); // Set Informations animation of pacman
+    Set_Animation(); 
     set_HighScore();
-	Set_Speed(1); 
-    direction = Right;
 }
 
 PacMan::~PacMan()
 {
-    cout << "Distructor...." << endl;
 }
-float PacMan::Get_PosX()
+float PacMan::Get_PosX() const
 {
 	return Pos_X;
 }
-float PacMan::Get_PosY()
+float PacMan::Get_PosY() const
 {
 	return Pos_Y;
 }
@@ -45,9 +42,9 @@ void PacMan::SetStartPos()
 }
 
 
-void PacMan::Set_Dead(bool E)
+void PacMan::Set_Dead()
 {
-	Dead = E;
+	Dead = true;
 }
 bool PacMan::Get_Dead()
 {
@@ -108,30 +105,30 @@ void PacMan::update_HighScore()
     }
 
 }// End function*
-
+/*
 // this function get game level and update pacman speed
 void PacMan::Set_Speed(int level)
 {
     float MaxSpeed = static_cast<float>(MAX_SPEED);
 	CurrentSpeed = MaxSpeed;
     
-    // if (level >= 1 && level <= 4){
-    //     CurrentSpeed = MaxSpeed * (80/100); 
-    // }
-    // else if (level >= 5 && level <= 20){
-    //     CurrentSpeed = MaxSpeed * (90/100); 
-    // }
-    // else if (level >= 21 && level <= 32){
-    //     CurrentSpeed = MaxSpeed; 
-    // }
-    // else if (level >= 33){
-    //     CurrentSpeed = MaxSpeed * (90/100); 
-    // }
-    // else{
-    //     throw out_of_range("Error: The value of Levels game out of range(Not be negatives number)");
-    // }
-}//End function Set_Level
-
+    if (level >= 1 && level <= 4){
+        CurrentSpeed = MaxSpeed * (80/100); 
+    }
+    else if (level >= 5 && level <= 20){
+        CurrentSpeed = MaxSpeed * (90/100); 
+    }
+    else if (level >= 21 && level <= 32){
+        CurrentSpeed = MaxSpeed; 
+    }
+    else if (level >= 33){
+        CurrentSpeed = MaxSpeed * (90/100); 
+    }
+    else{
+        throw out_of_range("Error: The value of Levels game out of range(Not be negatives number)");
+    }
+}////دEnd function Set_Level
+*/
 void PacMan::Destroy()
 {
 	Score -= 20;
@@ -266,8 +263,7 @@ void PacMan::update
 	{
 		Pos_X = CurrentSpeed - Cell_Size;
 	}
-
-	
+	update_HighScore();	
 }// End function update ----------
 
 // Reset the data of pacman after its death
@@ -276,4 +272,5 @@ void PacMan::Reset()
 	SetStartPos();
 	Dead = false;
 	direction = Right; // is Right
+	ElapcedTime_dead = sf::seconds(0);
 }
