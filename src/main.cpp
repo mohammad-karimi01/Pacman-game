@@ -125,7 +125,7 @@ int main()
         if (flag)
         {
             cout << "flag : " << flag << endl;
-            Player.Set_Dead(true); 
+            Player.Set_Dead(); 
             Blinky.Reset(GameLevel);
             Inky.Reset(GameLevel);
             Pinky.Reset(GameLevel);
@@ -143,7 +143,17 @@ int main()
         }
         
 
-        
+        if (!GameMap.CountPellet()) //Pacman is won
+        {
+            GameLevel++;
+            Player.Reset();
+            Blinky.Reset(GameLevel);
+            Inky.Reset(GameLevel);
+            Pinky.Reset(GameLevel);
+            Clyde.Reset(GameLevel);
+            ElapcedTime = sf::seconds(0);
+            GameMap.ToEqualize();
+        }
         window.clear(sf::Color::Black);
         
         GameMap.DrowMap(window);
