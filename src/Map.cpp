@@ -12,6 +12,7 @@ Map::Map()
 void Map::Set_Pattern()
 {
      PatternMap = {
+		// 21 * 21
         " ################### ",//0
 		" #........#........# ",//1
 		" #*##.###.#.###.##*# ",//2
@@ -28,11 +29,11 @@ void Map::Set_Pattern()
 		" #........#........# ",//13
 		" #.##.###.#.###.##.# ",//14
 		" #*.#.....P.....#.*# ",//15
-		" ##.#.#.#####.#.#.## ",
-		" #....#...#...#....# ",
-		" #.######.#.######.# ",
-		" #.................# ",
-		" ################### "
+		" ##.#.#.#####.#.#.## ",//16
+		" #....#...#...#....# ",//17
+		" #.######.#.######.# ",//18
+		" #.................# ",//19
+		" ################### "//20
     };
 }// End function Set_pattern
 
@@ -119,3 +120,20 @@ void Map::DrowMap(sf::RenderWindow & win)
 		}// End for 2
 	}// End for 1
 } //End function DrowMap
+
+bool Map::CountPellet()
+{
+	bool output = false;
+	for (auto items : MainMap)
+	{
+		for (auto item : items)
+		{
+			if (item == Cell::Food || item == Cell::Power_Food)
+			{
+				output = true;
+			}
+		}
+	}
+	
+	return output;
+}// End function Count...
