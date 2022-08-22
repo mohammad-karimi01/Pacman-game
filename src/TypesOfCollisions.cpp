@@ -34,29 +34,29 @@ bool TypesOfCollisions
 		{
 			case 0: 
 			{
-				x = static_cast<short>(floor(Temp_x));
-				y = static_cast<short>(floor(Temp_y));
+				x = static_cast<int>(floor(Temp_x));
+				y = static_cast<int>(floor(Temp_y));
 
 				break;
 			}
 			case 1: 
 			{
-				x = static_cast<short>(ceil(Temp_x));
-				y = static_cast<short>(floor(Temp_y));
+				x = static_cast<int>(ceil(Temp_x));
+				y = static_cast<int>(floor(Temp_y));
 
 				break;
 			}
 			case 2: 
 			{
-				x = static_cast<short>(floor(Temp_x));
-				y = static_cast<short>(ceil(Temp_y));
+				x = static_cast<int>(floor(Temp_x));
+				y = static_cast<int>(ceil(Temp_y));
 
 				break;
 			}
 			case 3:
 			{
-				x = static_cast<short>(ceil(Temp_x));
-				y = static_cast<short>(ceil(Temp_y));
+				x = static_cast<int>(ceil(Temp_x));
+				y = static_cast<int>(ceil(Temp_y));
 			}
 		}// End switch case
 
