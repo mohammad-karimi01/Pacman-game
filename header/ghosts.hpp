@@ -18,11 +18,10 @@ private:
     float Pos_Y; // موقعیت عرضی
     const int color; // Blinky = 0 , Pinky, Inky, Clyde
     IS_Direction Direction; 
-   // bool FrightenedGhosts; // if Ghosts eat by pacman in state scared
     float CurrentSpeed;
     sf::Time ScaredDuration; // مدت زمان ترسیده بر اساس مرحله
     sf::Time TotalTimeScared; // مجموع مدت زمان حالت ترسیده
-    sf::Time ElapcedTime_Scared; // ذخیره زمان 
+    sf::Time ElapcedTime_Scared; // ذخیره زمان برای نگه داشتن حالت ترسیده 
     int Winking; // تعداد چشمک هر مرحله
     
     sf::Sprite GhostsSprite;
@@ -36,12 +35,10 @@ private:
     void DirectionRandom(std::array<bool, 4> & ); // تعیین جهت اروح در تقاطع ها
 public:
     Ghosts(int );
-    void set_xy(int, int);
     int get_x() const;
     int get_y() const;
-    
     void Set_FrightenedGhosts();
-    bool Get_FrightenedGhosts();
+    bool Get_FrightenedGhosts() const;
     sf::Sprite & GetSprit();
   //  Color get_color();
 	void Set_Animation();
@@ -52,7 +49,7 @@ public:
     void SetRestartPos();
     void Set_Scared();
     bool Get_Scared();
-    void SetSpeed(int ); // Set current speed based on argument GameLevel
+   // void SetSpeed(int ); // Set current speed based on argument GameLevel
     void reverse();
     void DirectionChaser(std::array<bool, 4> &, float, float);
     void Update(sf::Time & ,const int ,std::array<std::array<Cell,Cell_Height>, Cell_Weight> & , float, float);

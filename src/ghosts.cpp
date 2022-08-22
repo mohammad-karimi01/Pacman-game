@@ -46,14 +46,13 @@ void Ghosts::Set_FrightenedGhosts()
     reverse();
     current_state = FrightenedGhosts;
 }
-bool Ghosts::Get_FrightenedGhosts()
+bool Ghosts::Get_FrightenedGhosts() const
 {
     if (current_state == FrightenedGhosts)
         return true;
     else
         return false;
 }
-
 
 void Ghosts::SetRestartPos()
 {
@@ -81,7 +80,6 @@ void Ghosts::SetRestartPos()
     else{
         throw invalid_argument("Error: invalid start position of Ghosts in constructors ghosts");
     }
-
 }
 
 void Ghosts::reverse()
@@ -254,10 +252,10 @@ void Ghosts::Set_ScaredDuration(int L)
 
 }
 
-
+/*
 void Ghosts::SetSpeed(int L)
 {
-    //float MaxSpeed = static_cast<float>(MAX_SPEED);
+    float MaxSpeed = static_cast<float>(MAX_SPEED);
     bool Tunel = false;
     if ((Pos_Y == 9 * Cell_Size) && 
         ( (Pos_X < 4 * Cell_Size) || (Pos_X > 16 * Cell_Size) ) )
@@ -265,52 +263,35 @@ void Ghosts::SetSpeed(int L)
         Tunel = true;
     }
 
-    //if (L >= 1 && L <= 4){
-    if (Get_FrightenedGhosts())
-    {
-        CurrentSpeed = 6;
     }
-    else if (Get_Scared() || Tunel){
-        CurrentSpeed = 2;
-        //MaxSpeed * ((float)50/100);
+    else if (L >= 5 && L <= 20){
+         if (Get_Scared()){
+           CurrentSpeed = MaxSpeed * ((float)55/100);
+       }
+       else if (Tunel){
+            CurrentSpeed = MaxSpeed * ((float)45/100);
+
+       }
+       else{
+           CurrentSpeed = MaxSpeed * ((float)85/100);
+       }
     }
-    else{
-        CurrentSpeed = 4;
-        //MaxSpeed * ((float)100/100);
+    else if (L >= 21){
+        if (Get_Scared()){
+           CurrentSpeed = MaxSpeed * ((float)60/100);
+       }
+       else if (Tunel){
+            CurrentSpeed = MaxSpeed * ((float)50/100);
+
+       }
+       else{
+           CurrentSpeed = MaxSpeed * ((float)95/100);
+       }
+
     }
-    ///////////////////////
-    // بررسی این مسئله که ایا موقعیت فعلی با در نظر گرفتن سرعت جدید
-    // منجر به تداخل در پیکسل های اشیا میشود یا نه
-    // اگر بشود منجر به باگ شده و رفتار اشیا نامشخص است
-   
-    // }
-    // else if (L >= 5 && L <= 20){
-    //      if (Get_Scared()){
-    //        CurrentSpeed = MaxSpeed * ((float)55/100);
-    //    }
-    //    else if (Tunel){
-    //         CurrentSpeed = MaxSpeed * ((float)45/100);
-
-    //    }
-    //    else{
-    //        CurrentSpeed = MaxSpeed * ((float)85/100);
-    //    }
-    // }
-    // else if (L >= 21){
-    //     if (Get_Scared()){
-    //        CurrentSpeed = MaxSpeed * ((float)60/100);
-    //    }
-    //    else if (Tunel){
-    //         CurrentSpeed = MaxSpeed * ((float)50/100);
-
-    //    }
-    //    else{
-    //        CurrentSpeed = MaxSpeed * ((float)95/100);
-    //    }
-
-    // }
 
 }
+*/
 
 void Ghosts::Update(sf::Time & ET ,const int level,array<array<Cell,Cell_Height>, Cell_Weight> & Gmap, float x, float y)
 {
